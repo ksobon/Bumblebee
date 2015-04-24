@@ -1,3 +1,6 @@
+#Copyright(c) 2015, David Mans, Konrad Sobon
+# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net
+
 import clr
 import sys
 clr.AddReference('ProtoGeometry')

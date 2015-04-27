@@ -59,10 +59,8 @@ if runMe:
 			wb = xlApp.ActiveWorkbook
 			ws = xlApp.Sheets(sheetName)
 			if cellRange != None:
-				originAddress = cellRange.split(":")[0]
-				extentAddress = cellRange.split(":")[1]
-				origin = ws.Cells(int(bb.CellIndex(originAddress)[1]), int(bb.CellIndex(originAddress)[0]))
-				extent = ws.Cells(int(bb.CellIndex(extentAddress)[1]), int(bb.CellIndex(extentAddress)[0]))
+				origin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])
+				extent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])
 			else:
 				origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
 				extent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)

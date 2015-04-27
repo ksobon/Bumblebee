@@ -65,3 +65,37 @@ def xlRange(address):
     extentRow = int(CellIndex(extentAddress)[0])
     extentCol = int(CellIndex(extentAddress)[1])
     return [originRow, originCol, extentRow, extentCol]
+
+def GetLineStyle(key):
+    keys = ["Continuous", "Dash", "DashDot", "DashDotDot", "RoundDot", "SquareDotMSO", "LongDash", 
+            "DoubleXL", "NoneXL"]
+    values = [1, -4115, 4, 5, -4118, -4118, -4115, -4119, -4142]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+def GetPatternType(key):
+    keys = ["xlCheckerBoard", "xlCrissCross", "xlDarkDiagonalDown", "xlGrey16", "xlGray25", 
+	    "xlGray50", "xlGray75", "xlGray8", "xlGrid", "xlDarkHorizontal", 
+	    "xlLightDiagonalDown", "xlLightHorizontal", "xlLightDiagonalUp", "xlLightVertical", "xlNone", 
+	    "xlSemiGray75", "xlSolid", "xlDarkDiagonalUp", "xlDarkVertical"]
+    values = [9, 16, -4121, 17, -4124, 
+		-4124, -4126, 18, 15, -4128,
+		13, 11, 14, 12, -4142, 
+		10, 1, -4162, -4166]
+    d = dict()
+    for i in range(len(keys)):
+	    d[keys[i]] = values[i]
+    if key in d:
+	    return d[key]
+    else:
+	    return None
+
+def RGBToRGBLong(rgb):
+    strValue = '%02x%02x%02x' % rgb
+    iValue = int(strValue, 16)
+    return iValue

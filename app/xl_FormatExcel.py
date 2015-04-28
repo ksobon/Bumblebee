@@ -59,8 +59,6 @@ def FormatCells1(fillStyle=None, textStyle=None, borderStyle=None, ws=None):
 			ws.Cells[x+1, y+1].Interior.Pattern = patternType
 			ws.Cells[x+1, y+1].Interior.PatternColor = foreColor
 			ws.Cells[x+1, y+1].Interior.Color = backColor
-		if borderStyle != None:
-			ws.Cells[x+1, y+1].BorderAround(bb.GetLineStyle(borderStyle[x1][y1]))
 		if textStyle != None:
 			textSettings = textStyle[x1][y1]
 			ws.Cells[x+1, y+1].Font.Name = bb.ParseTextStyle(textSettings)[0]
@@ -72,6 +70,12 @@ def FormatCells1(fillStyle=None, textStyle=None, borderStyle=None, ws=None):
 			ws.Cells[x+1, y+1].Font.Italic = bb.ParseTextStyle(textSettings)[6]
 			ws.Cells[x+1, y+1].Font.Underline = bb.ParseTextStyle(textSettings)[7]
 			ws.Cells[x+1, y+1].Font.Strikethrough = bb.ParseTextStyle(textSettings)[8]
+		if borderStyle != None:
+			borderSettings = borderStyle[x1][y1]
+			lineStyle = bb.ParseBorderStyle(borderSettings)[0]
+			lineWeight = bb.ParseBorderStyle(borderSettings)[1]
+			lineColor = bb.ParseBorderStyle(borderSettings)[2]
+			ws.Cells[x+1, y+1].BorderAround(lineStyle, lineWeight, lineColor)
 		return ws
 
 	if fillStyle != None:				
@@ -96,8 +100,6 @@ def FormatCells(origin=None, extent=None, fillStyle=None, textStyle=None, border
 		ws.Range[origin, extent].Interior.Pattern = patternType
 		ws.Range[origin, extent].Interior.PatternColor = foreColor
 		ws.Range[origin, extent].Interior.Color = backColor
-	if borderStyle != None:
-		ws.Range[origin, extent].BorderAround(bb.GetLineStyle(borderStyle))
 	if textStyle != None:
 		ws.Range[origin, extent].Font.Name = bb.ParseTextStyle(textStyle)[0]
 		ws.Range[origin, extent].Font.Size = bb.ParseTextStyle(textStyle)[1]
@@ -108,6 +110,11 @@ def FormatCells(origin=None, extent=None, fillStyle=None, textStyle=None, border
 		ws.Range[origin, extent].Font.Italic = bb.ParseTextStyle(textStyle)[6]
 		ws.Range[origin, extent].Font.Underline = bb.ParseTextStyle(textStyle)[7]
 		ws.Range[origin, extent].Font.Strikethrough = bb.ParseTextStyle(textStyle)[8]
+	if borderStyle != None:
+		lineStyle = bb.ParseBorderStyle(borderStyle)[0]
+		lineWeight = bb.ParseBorderStyle(borderStyle)[1]
+		lineColor = bb.ParseBorderStyle(borderStyle)[2]
+		ws.Range[origin, extent].BorderAround(lineStyle, lineWeight, lineColor)
 	return ws
 
 if runMe:

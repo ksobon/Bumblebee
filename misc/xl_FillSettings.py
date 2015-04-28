@@ -10,6 +10,12 @@ foreColor = IN[2]
 opacity = IN[3]
 bevelType = IN[4]
 
+if patternType == None:
+	patternType = "xlNone"
+if opacity == None:
+	opacity = 0
+if bevelType == None:
+	bevelType = "None"
 if backColor != None:
 	bcolor = ",".join([str(backColor.Red), str(backColor.Green), str(backColor.Blue)])
 else:

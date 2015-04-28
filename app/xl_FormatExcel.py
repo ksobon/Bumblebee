@@ -34,9 +34,10 @@ dataEnteringNode = IN
 filePath = IN[0]
 runMe = IN[1]
 sheetName = IN[2]
-cellFill = IN[3]
-borderStyle = IN[4]
-cellRange = IN[5]
+fillStyle = IN[3]
+textStyle = IN[4]
+borderStyle = IN[5]
+cellRange = IN[6]
 
 def LiveStream():
 	try:
@@ -46,59 +47,67 @@ def LiveStream():
 		return xlApp
 	except:
 		return None
-
-def ParseFillSettings(cellFill):
-	paramList = cellFill.split("~")
-	patternType = bb.GetPatternType(paramList[0])
-	# if pattern type is supplied then it needs a background color
-	# to be set so if no background color supplied it will be assigned 
-	# a default value of white
-	if paramList[1] == "xlNone" and paramList[0] == "xlNone":
-		backColor = -4142
-	elif paramList[1] == "xlNone" and paramList[0] != "xlNone":
-		backColor = bb.RGBToRGBLong((255,255,255))
-	else:
-		bColors = paramList[1].split(",")
-		backColor = bb.RGBToRGBLong((int(bColors[2]), int(bColors[1]), int(bColors[0])))
-	if paramList[2] == "xlNone" and paramList[0] == "xlNone":
-		foreColor = -4142
-	elif paramList[2] == "xlNone" and paramList[0] != "xlNone":
-		foreColor = bb.RGBToRGBLong((0,0,0))
-	else:
-		fColors = paramList[2].split(",")
-		foreColor = bb.RGBToRGBLong((int(fColors[2]), int(fColors[1]), int(fColors[0])))
-	return [patternType, backColor, foreColor]
 			
-def FormatCells1(cellFill=None, borderStyle=None, ws=None):
+def FormatCells1(fillStyle=None, textStyle=None, borderStyle=None, ws=None):
 
-	def FormatData1(x=None, y=None, x1=None, y1=None, cellFill=None, borderStyle=None, ws=None):
-		if cellFill != None:
-			fillSettings = cellFill[x1][y1]
-			patternType = ParseFillSettings(fillSettings)[0]
-			backColor = ParseFillSettings(fillSettings)[1]
-			foreColor = ParseFillSettings(fillSettings)[2]
+	def FormatData1(x=None, y=None, x1=None, y1=None, fillStyle=None, textStyle=None, borderStyle=None, ws=None):
+		if fillStyle != None:
+			fillSettings = fillStyle[x1][y1]
+			patternType = bb.ParseFillSettings(fillSettings)[0]
+			backColor = bb.ParseFillSettings(fillSettings)[1]
+			foreColor = bb.ParseFillSettings(fillSettings)[2]
 			ws.Cells[x+1, y+1].Interior.Pattern = patternType
 			ws.Cells[x+1, y+1].Interior.PatternColor = foreColor
 			ws.Cells[x+1, y+1].Interior.Color = backColor
 		if borderStyle != None:
 			ws.Cells[x+1, y+1].BorderAround(bb.GetLineStyle(borderStyle[x1][y1]))
+		if textStyle != None:
+			textSettings = textStyle[x1][y1]
+			ws.Cells[x+1, y+1].Font.Name = bb.ParseTextStyle(textSettings)[0]
+			ws.Cells[x+1, y+1].Font.Size = bb.ParseTextStyle(textSettings)[1]
+			ws.Cells[x+1, y+1].Font.Color = bb.ParseTextStyle(textSettings)[2] 
+			ws.Cells[x+1, y+1].HorizontalAlignment = bb.ParseTextStyle(textSettings)[3]
+			ws.Cells[x+1, y+1].VerticalAlignment = bb.ParseTextStyle(textSettings)[4]
+			ws.Cells[x+1, y+1].Font.Bold = bb.ParseTextStyle(textSettings)[5]
+			ws.Cells[x+1, y+1].Font.Italic = bb.ParseTextStyle(textSettings)[6]
+			ws.Cells[x+1, y+1].Font.Underline = bb.ParseTextStyle(textSettings)[7]
+			ws.Cells[x+1, y+1].Font.Strikethrough = bb.ParseTextStyle(textSettings)[8]
 		return ws
-					
-	for i in range(0, len(cellFill), 1):
-		for j in range(0, len(cellFill[0]), 1):
-			FormatData1(i, j, i, j, cellFill, borderStyle, ws)
+
+	if fillStyle != None:				
+		for i in range(0, len(fillStyle), 1):
+			for j in range(0, len(fillStyle[0]), 1):
+				FormatData1(i, j, i, j, fillStyle, textStyle, borderStyle, ws)
+	elif textStyle != None:
+		for i in range(0, len(textStyle), 1):
+			for j in range(0, len(textStyle[0]), 1):
+				FormatData1(i, j, i, j, fillStyle, textStyle, borderStyle, ws)
+	else:
+		for i in range(0, len(borderStyle), 1):
+			for j in range(0, len(borderStyle[0]), 1):
+				FormatData1(i, j, i, j, fillStyle, textStyle, borderStyle, ws)
 	return ws
 
-def FormatCells(origin=None, extent=None, cellFill=None, borderStyle=None, ws=None):
-	if cellFill != None:
-		patternType = ParseFillSettings(cellFill)[0]
-		backColor = ParseFillSettings(cellFill)[1]
-		foreColor = ParseFillSettings(cellFill)[2]
+def FormatCells(origin=None, extent=None, fillStyle=None, textStyle=None, borderStyle=None, ws=None):
+	if fillStyle != None:
+		patternType = bb.ParseFillSettings(fillStyle)[0]
+		backColor = bb.ParseFillSettings(fillStyle)[1]
+		foreColor = bb.ParseFillSettings(fillStyle)[2]
 		ws.Range[origin, extent].Interior.Pattern = patternType
 		ws.Range[origin, extent].Interior.PatternColor = foreColor
 		ws.Range[origin, extent].Interior.Color = backColor
 	if borderStyle != None:
 		ws.Range[origin, extent].BorderAround(bb.GetLineStyle(borderStyle))
+	if textStyle != None:
+		ws.Range[origin, extent].Font.Name = bb.ParseTextStyle(textStyle)[0]
+		ws.Range[origin, extent].Font.Size = bb.ParseTextStyle(textStyle)[1]
+		ws.Range[origin, extent].Font.Color = bb.ParseTextStyle(textStyle)[2] 
+		ws.Range[origin, extent].HorizontalAlignment = bb.ParseTextStyle(textStyle)[3]
+		ws.Range[origin, extent].VerticalAlignment = bb.ParseTextStyle(textStyle)[4]
+		ws.Range[origin, extent].Font.Bold = bb.ParseTextStyle(textStyle)[5]
+		ws.Range[origin, extent].Font.Italic = bb.ParseTextStyle(textStyle)[6]
+		ws.Range[origin, extent].Font.Underline = bb.ParseTextStyle(textStyle)[7]
+		ws.Range[origin, extent].Font.Strikethrough = bb.ParseTextStyle(textStyle)[8]
 	return ws
 
 if runMe:
@@ -113,20 +122,25 @@ if runMe:
 			wb = xlApp.ActiveWorkbook
 			ws = xlApp.Sheets(sheetName)
 			
-			if cellRange != None and not any(isinstance(item, list) for item in cellFill):
+			if cellRange != None and not bb.CheckInputs(fillStyle, textStyle, borderStyle):
+				#message = "cellRange + no nested inp"
 				origin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])
 				extent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])
-				FormatCells(origin, extent, cellFill, borderStyle, ws)
+				FormatCells(origin, extent, fillStyle, textStyle, borderStyle, ws)
 				Marshal.ReleaseComObject(extent)
 				Marshal.ReleaseComObject(origin)
-			elif cellRange == None and not any(isinstance(item, list) for item in cellFill):
+			elif cellRange == None and not bb.CheckInputs(fillStyle, textStyle, borderStyle):
+				message = "cellRange is None but no nested inp"
 				origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
 				extent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)
-				FormatCells(origin, extent, cellFill, borderStyle, ws)
+				FormatCells(origin, extent, fillStyle, textStyle, borderStyle, ws)
 				Marshal.ReleaseComObject(extent)
 				Marshal.ReleaseComObject(origin)
-			elif cellRange == None and any(isinstance(item, list) for item in cellFill):
-				FormatCells1(cellFill, borderStyle, ws)
+			elif cellRange == None and bb.CheckInputs(fillStyle, textStyle, borderStyle):
+				#message = "cellRange is None and inputs are nested"
+				FormatCells1(fillStyle, textStyle, borderStyle, ws)
+			else:
+				message = "Range and Style List cannot be combined. Please either use Range with single item Styles or styles as list input"
 
 			wb.SaveAs(str(filePath))
 			xlApp.ActiveWorkbook.Close(False)

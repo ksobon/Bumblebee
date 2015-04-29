@@ -6,7 +6,7 @@ Bumblebee
 
 Bumblebee is an Excel interop for Dynamo. 
 
-Featueres so far:
+Features so far:
 
 1. Awesome logo? 
 2. Read Excel. 

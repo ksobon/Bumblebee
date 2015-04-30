@@ -63,7 +63,7 @@ if runMe:
 		if origin != None:
 			origin = ws.Cells(origin[1], origin[0])
 		else:
-			origin = ws.Cells(ws.UsedRange.Row, ws.UsedRangeColumn)
+			origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
 		if extent != None:
 			extent = ws.Cells(extent[1], extent[0])
 		else:

@@ -10,6 +10,8 @@ Excel and Dynamo interop library
 """
 import clr
 import sys
+sys.path.append(r"C:\Program Files\Dynamo 0.8")
+clr.AddReference('ProtoGeometry')
 
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
@@ -17,6 +19,7 @@ sys.path.append(pyt_path)
 import System
 from System import Array
 from System.Collections.Generic import *
+import Autodesk.DesignScript as ds
 
 clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
 from Microsoft.Office.Interop import Excel
@@ -65,69 +68,6 @@ def xlRange(address):
     extentRow = int(CellIndex(extentAddress)[0])
     extentCol = int(CellIndex(extentAddress)[1])
     return [originRow, originCol, extentRow, extentCol]
-
-def GetPatternType(key):
-    keys = ["xlCheckerBoard", "xlCrissCross", "xlDarkDiagonalDown", "xlGrey16", "xlGray25", 
-	    "xlGray50", "xlGray75", "xlGray8", "xlGrid", "xlDarkHorizontal", 
-	    "xlLightDiagonalDown", "xlLightHorizontal", "xlLightDiagonalUp", "xlLightVertical", "xlNone", 
-	    "xlSemiGray75", "xlSolid", "xlDarkDiagonalUp", "xlDarkVertical"]
-    values = [9, 16, -4121, 17, -4124, -4124, -4126, 18, 15, -4128, 13, 11, 14, 12, -4142, 10, 1, -4162, -4166]
-    d = dict()
-    for i in range(len(keys)):
-	    d[keys[i]] = values[i]
-    if key in d:
-	    return d[key]
-    else:
-	    return None
-
-def GetTextHorJustType(key):
-    keys = ["Left", "Center", "Right"]
-    values = [-4131, -4108, -4152]
-    d = dict()
-    for i in range(len(keys)):
-        d[keys[i]] = values[i]
-    if key in d:
-	return d[key]
-    else:
-	return None
-
-def GetTextVerJustType(key):
-    keys = ["Bottom", "Center", "Top"]
-    values = [-4017, -4108, -4160]
-    d = dict()
-    for i in range(len(keys)):
-        d[keys[i]] = values[i]
-    if key in d:
-	return d[key]
-    else:
-	return None
-
-def GetLineType(key):
-    keys = ["Continuous", "Dash", "DashDot", "DashDotDot", "RoundDot", "SquareDotMSO", "LongDash", "DoubleXL", "NoneXL"]
-    values = [1, -4115, 4, 5, -4118, -4118, -4115, -4119, -4142]
-    d = dict()
-    for i in range(len(keys)):
-        d[keys[i]] = values[i]
-    if key in d:
-	return d[key]
-    else:
-	return None
-
-def GetLineWeight(key):
-    keys = ["Hairline", "Medium", "Thick", "Thin"]
-    values = [1, -4138, 4, 2]
-    d = dict()
-    for i in range(len(keys)):
-        d[keys[i]] = values[i]
-    if key in d:
-	return d[key]
-    else:
-	return None
-
-def RGBToRGBLong(rgb):
-    strValue = '%02x%02x%02x' % rgb
-    iValue = int(strValue, 16)
-    return iValue
 
 def ParseFillSettings(fillStyle):
     paramList = fillStyle.split("~")
@@ -203,3 +143,233 @@ def CheckInputs(fillStyle, textStyle, borderStyle):
     	return True
     else:
     	return False
+
+def RGBToRGBLong(rgb):
+    strValue = '%02x%02x%02x' % rgb
+    iValue = int(strValue, 16)
+    return iValue
+
+def GetPatternType(key):
+    keys = ["xlCheckerBoard", "xlCrissCross", "xlDarkDiagonalDown", "xlGrey16", "xlGray25", 
+	    "xlGray50", "xlGray75", "xlGray8", "xlGrid", "xlDarkHorizontal", 
+	    "xlLightDiagonalDown", "xlLightHorizontal", "xlLightDiagonalUp", "xlLightVertical", "xlNone", 
+	    "xlSemiGray75", "xlSolid", "xlDarkDiagonalUp", "xlDarkVertical"]
+    values = [9, 16, -4121, 17, -4124, -4124, -4126, 18, 15, -4128, 13, 11, 14, 12, -4142, 10, 1, -4162, -4166]
+    d = dict()
+    for i in range(len(keys)):
+	    d[keys[i]] = values[i]
+    if key in d:
+	    return d[key]
+    else:
+	    return None
+
+class BBFillStyle(object):
+
+    def __init__(self, patternType=None, backgroundColor=None, patternColor=None, opacity=None, bevelType=None):
+        self.patternType = patternType
+        self.backgroundColor = backgroundColor
+        self.patternColor = patternColor
+        self.opacity = opacity
+        self.bevelType = bevelType
+    def PatternType(self):
+        if self.patternType == None:
+            return None
+        else:
+            return GetPatternType(self.patternType)
+    def BackgroundColor(self):
+        if self.backgroundColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.backgroundColor.Blue, self.backgroundColor.Green, self.backgroundColor.Red))
+    def PatternColor(self):
+        if self.patternColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.patternColor.Blue, self.patternColor.Green, self.patternColor.Red))
+    def Opacity(self):
+        if self.opacity == None:
+            return None
+    def BevelType(self):
+        if self.bevelType == None:
+            return None
+
+def GetTextHorJustType(key):
+    keys = ["Left", "Center", "Right"]
+    values = [-4131, -4108, -4152]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+def GetTextVerJustType(key):
+    keys = ["Bottom", "Center", "Top"]
+    values = [-4017, -4108, -4160]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+class BBTextStyle(object):
+
+    def __init__(self, name=None, size=None, color=None, horizontalAlign=None, verticalAlign=None, bold=None, italic=None, underline=None, strikethrough=None):
+        self.name = name
+        self.size = size
+        self.color = color
+        self.horizontalAlign = horizontalAlign
+        self.verticalAlign = verticalAlign
+        self.bold = bold
+        self.italic = italic
+        self.underline = underline
+        self.strikethrough = strikethrough
+    def Name(self):
+        if self.name == None:
+            return None
+        else:
+            return self.name
+    def Size(self):
+        if self.size == None:
+            return None
+        else:
+            return self.size
+    def Color(self):
+        if self.color == None:
+            return None
+        else:
+            return RGBToRGBLong((self.color.Blue, self.color.Green, self.color.Red))
+    def HorizontalAlign(self):
+        if self.horizontalAlign == None:
+            return None
+        else:
+            return GetTextHorJustType(self.horizontalAlign)
+    def VerticalAlign(self):
+        if self.verticalAlign == None:
+            return None
+        else:
+            return GetTextVerJustType(self.verticalAlign)
+    def Bold(self):
+        if self.bold == None:
+            return None
+        else:
+            return self.bold
+    def Italic(self):
+        if self.italic == None:
+            return None
+        else:
+            return self.italic
+    def Underline(self):
+        if self.underline == None:
+            return None
+        else:
+            return self.underline
+    def Strikethrough(self):
+        if self.strikethrough == None:
+            return None
+        else:
+            return self.strikethrough
+
+def GetLineType(key):
+    keys = ["Continuous", "Dash", "DashDot", "DashDotDot", "RoundDot", "SquareDotMSO", "LongDash", "DoubleXL", "NoneXL"]
+    values = [1, -4115, 4, 5, -4118, -4118, -4115, -4119, -4142]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+def GetLineWeight(key):
+    keys = ["Hairline", "Medium", "Thick", "Thin"]
+    values = [1, -4138, 4, 2]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+class BBBorderStyle(object):
+
+    def __init__(self, lineType=None, weight=None, color=None):
+        self.lineType = lineType
+        self.weight = weight
+        self.color = color
+    def LineType(self):
+        if self.lineType == None:
+            return None
+        else:
+            return GetLineType(self.lineType)
+    def Weight(self):
+        if self.weight == None:
+            return None
+        else:
+            return GetLineWeight(self.weight)
+    def Color(self):
+        if self.color == None:
+            return None
+        else:
+            return RGBToRGBLong((self.color.Blue, self.color.Green, self.color.Red)) 
+
+class BBGraphicStyle(object):
+
+    def __init__(self, fillStyle=None, textStyle=None, borderStyle=None):
+        self.fillStyle = fillStyle
+        self.textStyle = textStyle
+        self.borderStyle = borderStyle
+
+def GetFormatConditionType(key):
+    keys = ["CellValue", "Expression"]
+    values = [1, 2]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+def GetOperatorType(key):
+    keys = ["Equal", "NotEqual", "Greater", "GreaterEqual", "Less", "LessEqual", "Between", "NotBetween"]
+    values = [3, 4, 5, 7, 6, 8, 1, 2]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+class BBFormatCondition(object):
+
+    def __init__(self, formatConditionType=None, operatorType=None, values=None, graphicStyle=None):
+        self.formatConditionType = formatConditionType
+        self.operatorType = operatorType
+        self.values = values
+        self.graphicStyle = graphicStyle
+    def FormatConditionType(self):
+        if self.formatConditionType == None:
+            return None
+        else:
+            return GetFormatConditionType(self.formatConditionType)
+    def OperatorType(self):
+        if self.operatorType == None:
+            return None
+        else:
+            return GetOperatorType(self.operatorType)
+    def Values(self):
+        if self.values == None:
+            return None
+        else:
+            return self.values
+    def GraphicStyle(self):
+        if self.graphicStyle == None:
+            return None
+        else:
+            return self.graphicStyle

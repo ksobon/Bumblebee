@@ -1,6 +1,23 @@
 #Copyright(c) 2015, David Mans, Konrad Sobon
 # @arch_laboratory, http://archi-lab.net, http://neoarchaic.net
 
+import clr
+import sys
+
+pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
+sys.path.append(pyt_path)
+
+import os
+import os.path
+appDataPath = os.getenv('APPDATA')
+bbPath = appDataPath + r"\Dynamo\0.8\packages\Bumblebee\extra"
+if bbPath not in sys.path:
+	sys.path.Add(bbPath)
+
+import bumblebee as bb
+bee = bb
+reload(bee)
+
 #The inputs to this node will be stored as a list in the IN variable.
 dataEnteringNode = IN
 
@@ -14,38 +31,26 @@ italic = IN[6]
 underline = IN[7]
 strikethrough = IN[8]
 
-if name == None:
-	name = "Arial"
-if size == None:
-	size = str(8)
-else:
-	size = str(IN[1])
-if color == None:
-	color = ",".join([str(0), str(0), str(0)])
-else:
-	color = ",".join([str(color.Red), str(color.Green), str(color.Blue)])
-if hAlign == None:
-	hAlign = "Left"
-if vAlign == None:
-	vAlign = "Center"
-if bold == None:
-	bold = "false"
-else:
-	bold = str(IN[5])
-if italic == None:
-	italic = "false"
-else:
-	italic = str(IN[6])
-if underline == None:
-	underline = "false"
-else:
-	underline = str(IN[7])
-if strikethrough == None:
-	strikethrough = "false"
-else:
-	strikethrough = str(IN[8])
+textStyle = bb.BBTextStyle()
 
-textStyle = "~".join([name, size, color, hAlign, vAlign, bold, italic, underline, strikethrough])
+if name != None:
+	textStyle.name = name
+if size != None:
+	textStyle.size = size
+if color != None:
+	textStyle.color = color
+if hAlign != None:
+	textStyle.horizontalAlign = hAlign
+if vAlign != None:
+	textStyle.verticalAlign = vAlign
+if bold != None:
+	textStyle.bold = bold
+if italic != None:
+	textStyle.italic = italic
+if underline != None:
+	textStyle.underline = underline
+if strikethrough != None:
+	textStyle.strikethrough = strikethrough
 
 #Assign your output to the OUT variable
 OUT = textStyle

@@ -1,7 +1,7 @@
 Bumblebee
 ============
 
-![Screenshot](http://archi-lab.net/wp-content/uploads/2015/04/bumblebee_icons-021.png?width=600)
+![Screenshot](http://archi-lab.net/wp-content/uploads/2015/05/bumblebee_icons-041.png?width=600)
 
 
 Bumblebee is an Excel interop for Dynamo. 

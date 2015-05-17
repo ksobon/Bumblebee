@@ -47,16 +47,14 @@ def LiveStream():
 		return None
 
 def ConditionFormatCells(origin=None, extent=None, ws=None, formatConditions=None):
+	ws.Range[origin, extent].FormatConditions.Delete()
 	if not isinstance(formatConditions, list):
 		fcType = formatConditions.FormatConditionType()
 		operatorType = formatConditions.OperatorType()
 		values = formatConditions.Values()
-		
 		fillStyle = formatConditions.GraphicStyle().fillStyle
 		textStyle = formatConditions.GraphicStyle().textStyle
 		borderStyle = formatConditions.GraphicStyle().borderStyle
-		
-		ws.Range[origin, extent].FormatConditions.Delete
 		if operatorType == 2 or operatorType == 1:
 			ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values[1], values[0])
 		else:
@@ -68,10 +66,27 @@ def ConditionFormatCells(origin=None, extent=None, ws=None, formatConditions=Non
 			if fillStyle.patternColor != None:
 				ws.Range[origin, extent].FormatConditions(1).Interior.PatternColor = fillStyle.PatternColor()
 			ws.Range[origin, extent].FormatConditions(1).StopIfTrue = False
-
+	else:
+		for index, i in enumerate(formatConditions):
+			fcType = i.FormatConditionType()
+			operatorType = i.OperatorType()
+			values = i.Values()
+			fillStyle = i.GraphicStyle().fillStyle
+			textStyle = i.GraphicStyle().textStyle
+			borderStyle = i.GraphicStyle().borderStyle
+			if operatorType == 2 or operatorType == 1:
+				ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values[1], values[0])
+			else:
+				ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values)
+				if fillStyle.backgroundColor != None:
+					ws.Range[origin, extent].FormatConditions(index+1).Interior.Color = fillStyle.BackgroundColor()
+				if fillStyle.patternType != None:
+					ws.Range[origin, extent].FormatConditions(index+1).Interior.Pattern = fillStyle.PatternType()
+				if fillStyle.patternColor != None:
+					ws.Range[origin, extent].FormatConditions(index+1).Interior.PatternColor = fillStyle.PatternColor()
+				ws.Range[origin, extent].FormatConditions(index+1).StopIfTrue = False
 	return ws
 	
-
 if runMe:
 	message = None
 	if LiveStream() == None:
@@ -83,19 +98,17 @@ if runMe:
 			xlApp.Workbooks.open(str(filePath))
 			wb = xlApp.ActiveWorkbook
 			ws = xlApp.Sheets(sheetName)
-			
-			if cellRange != None and not isinstance(formatConditions, list):
+			if cellRange != None:
 				origin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])
 				extent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])
+				#ws.Range[origin,extent].ClearFormats()
 				ConditionFormatCells(origin, extent, ws, formatConditions)
 				Marshal.ReleaseComObject(extent)
 				Marshal.ReleaseComObject(origin)
 			else:
 				message = "Range and Style List cannot be combined. Please either use Range with single item Styles or styles as list input"
-
 			wb.SaveAs(str(filePath))
 			xlApp.ActiveWorkbook.Close(False)
-			
 			xlApp.ScreenUpdating = True
 			Marshal.ReleaseComObject(ws)
 			Marshal.ReleaseComObject(wb)

@@ -46,45 +46,64 @@ def LiveStream():
 	except:
 		return None
 
-def ConditionFormatCells(origin=None, extent=None, ws=None, formatConditions=None):
-	ws.Range[origin, extent].FormatConditions.Delete()
-	if not isinstance(formatConditions, list):
+def ConditionFormatCells(origin, extent, ws, formatConditions):
+	
+	def AddFormatCondition(origin=None, extent=None, ws=None, formatConditions=None, index=None):
 		fcType = formatConditions.FormatConditionType()
-		operatorType = formatConditions.OperatorType()
-		values = formatConditions.Values()
-		fillStyle = formatConditions.GraphicStyle().fillStyle
-		textStyle = formatConditions.GraphicStyle().textStyle
-		borderStyle = formatConditions.GraphicStyle().borderStyle
-		if operatorType == 2 or operatorType == 1:
-			ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values[1], values[0])
-		else:
-			ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values)
-			if fillStyle.backgroundColor != None:
-				ws.Range[origin, extent].FormatConditions(1).Interior.Color = fillStyle.BackgroundColor()
-			if fillStyle.patternType != None:
-				ws.Range[origin, extent].FormatConditions(1).Interior.Pattern = fillStyle.PatternType()
-			if fillStyle.patternColor != None:
-				ws.Range[origin, extent].FormatConditions(1).Interior.PatternColor = fillStyle.PatternColor()
-			ws.Range[origin, extent].FormatConditions(1).StopIfTrue = False
-	else:
-		for index, i in enumerate(formatConditions):
-			fcType = i.FormatConditionType()
-			operatorType = i.OperatorType()
-			values = i.Values()
-			fillStyle = i.GraphicStyle().fillStyle
-			textStyle = i.GraphicStyle().textStyle
-			borderStyle = i.GraphicStyle().borderStyle
+		if fcType == 1:
+			operatorType = formatConditions.OperatorType()
+			values = formatConditions.Values()
 			if operatorType == 2 or operatorType == 1:
 				ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values[1], values[0])
 			else:
 				ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values)
-				if fillStyle.backgroundColor != None:
-					ws.Range[origin, extent].FormatConditions(index+1).Interior.Color = fillStyle.BackgroundColor()
-				if fillStyle.patternType != None:
-					ws.Range[origin, extent].FormatConditions(index+1).Interior.Pattern = fillStyle.PatternType()
-				if fillStyle.patternColor != None:
-					ws.Range[origin, extent].FormatConditions(index+1).Interior.PatternColor = fillStyle.PatternColor()
-				ws.Range[origin, extent].FormatConditions(index+1).StopIfTrue = False
+				
+		if fcType == 2:
+			operatorType = formatConditions.OperatorType()
+			expression = formatConditions.Expression()
+			ws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, expression)
+			
+		if fcType == "2Color":
+			ws.Range[origin, extent].FormatConditions.AddColorScale(ColorScaleType = 2)
+			
+			#if formatConditions.MinType() != 1:
+				#ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Value = formatConditions.MinValue()
+			#if formatConditions.MaxType() != 2:
+				#ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MaxValue()
+		return ws
+		
+	def FormatGraphics(origin=None, extent=None, ws=None, formatConditions=None, index=None):
+		if index == None:
+			index = 1
+		else:
+			index = index + 1
+		if formatConditions.FormatConditionType() == "2Color":
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Type = formatConditions.MinType()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).FormatColor.Color = formatConditions.MinColor()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Type = formatConditions.MaxType()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).FormatColor.Color = formatConditions.MaxColor()
+		else:
+			fillStyle = formatConditions.GraphicStyle().fillStyle
+			textStyle = formatConditions.GraphicStyle().textStyle
+			borderStyle = formatConditions.GraphicStyle().borderStyle
+			
+			if fillStyle.backgroundColor != None:
+				ws.Range[origin, extent].FormatConditions(index).Interior.Color = fillStyle.BackgroundColor()
+			if fillStyle.patternType != None:
+				ws.Range[origin, extent].FormatConditions(index).Interior.Pattern = fillStyle.PatternType()
+			if fillStyle.patternColor != None:
+				ws.Range[origin, extent].FormatConditions(index).Interior.PatternColor = fillStyle.PatternColor()
+			ws.Range[origin, extent].FormatConditions(index).StopIfTrue = False
+		return ws
+
+	ws.Range[origin, extent].FormatConditions.Delete()
+	if not isinstance(formatConditions, list):
+		AddFormatCondition(origin, extent, ws, formatConditions)
+		FormatGraphics(origin, extent, ws, formatConditions, None)
+	else:
+		for index, value in enumerate(formatConditions):
+			AddFormatCondition(origin, extent, ws, value)
+			FormatGraphics(origin, extent, ws, value, index)
 	return ws
 	
 if runMe:
@@ -101,7 +120,6 @@ if runMe:
 			if cellRange != None:
 				origin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])
 				extent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])
-				#ws.Range[origin,extent].ClearFormats()
 				ConditionFormatCells(origin, extent, ws, formatConditions)
 				Marshal.ReleaseComObject(extent)
 				Marshal.ReleaseComObject(origin)

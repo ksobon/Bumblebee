@@ -19,15 +19,12 @@ import bumblebee as bb
 #The inputs to this node will be stored as a list in the IN variable.
 dataEnteringNode = IN
 
-formatConditionType = IN[0]
-operatorType = IN[1]
-values = IN[2]
-graphicStyle = IN[3]
+operatorType = IN[0]
+values = IN[1]
+graphicStyle = IN[2]
 
-formatCondition = bb.BBFormatCondition()
+formatCondition = bb.BBCellValueFormatCondition()
 
-if formatConditionType != None:
-	formatCondition.formatConditionType = formatConditionType
 if operatorType != None:
 	formatCondition.operatorType = operatorType
 if values != None:

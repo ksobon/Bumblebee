@@ -323,7 +323,7 @@ class BBGraphicStyle(object):
         self.fillStyle = fillStyle
         self.textStyle = textStyle
         self.borderStyle = borderStyle
-
+"""
 def GetFormatConditionType(key):
     keys = ["CellValue", "Expression"]
     values = [1, 2]
@@ -334,7 +334,7 @@ def GetFormatConditionType(key):
 	return d[key]
     else:
 	return None
-
+"""
 def GetOperatorType(key):
     keys = ["Equal", "NotEqual", "Greater", "GreaterEqual", "Less", "LessEqual", "Between", "NotBetween"]
     values = [3, 4, 5, 7, 6, 8, 1, 2]
@@ -346,18 +346,15 @@ def GetOperatorType(key):
     else:
 	return None
 
-class BBFormatCondition(object):
+class BBCellValueFormatCondition(object):
 
-    def __init__(self, formatConditionType=None, operatorType=None, values=None, graphicStyle=None):
+    def __init__(self, formatConditionType=1, operatorType=None, values=None, graphicStyle=None):
         self.formatConditionType = formatConditionType
         self.operatorType = operatorType
         self.values = values
         self.graphicStyle = graphicStyle
     def FormatConditionType(self):
-        if self.formatConditionType == None:
-            return None
-        else:
-            return GetFormatConditionType(self.formatConditionType)
+        return  self.formatConditionType
     def OperatorType(self):
         if self.operatorType == None:
             return None
@@ -373,3 +370,79 @@ class BBFormatCondition(object):
             return None
         else:
             return self.graphicStyle
+
+class BBExpressionFormatCondition(object):
+
+    def __init__(self, formatConditionType=2, operatorType=-4142, expression=None, graphicStyle=None):
+        self.formatConditionType = formatConditionType
+        self.operatorType = operatorType
+        self.expression = expression
+        self.graphicStyle = graphicStyle
+    def FormatConditionType(self):
+        return self.formatConditionType
+    def OperatorType(self):
+        return self.operatorType
+    def Expression(self):
+        if self.expression == None:
+            return None
+        else:
+            return self.expression
+    def GraphicStyle(self):
+        if self.graphicStyle == None:
+            return None
+        else:
+            return self.graphicStyle
+
+def GetColorScaleCriteriaType(key):
+    keys = ["LowestValue", "Number", "Percent", "Formula", "Percentile", "HighestValue", "None"]
+    values = [1, 0, 3, 4, 5, 2, -1]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+class BB2ColorScaleFormatCondition(object):
+
+    def __init__(self, formatConditionType="2Color", minType=None, minValue=None, minColor=None, maxType=None, maxValue=None, maxColor=None):
+        self.formatConditionType = formatConditionType
+        self.minType = minType
+        self.minValue = minValue
+        self.minColor = minColor
+        self.maxType = maxType
+        self.maxValue = maxValue
+        self.maxColor = maxColor
+    def FormatConditionType(self):
+        return self.formatConditionType
+    def MinType(self):
+        if self.minType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.minType)
+    def MinValue(self):
+        if self.minValue == None:
+            return None
+        else:
+            return self.minValue
+    def MinColor(self):
+        if self.minColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.minColor.Blue, self.minColor.Green, self.minColor.Red))
+    def MaxType(self):
+        if self.maxType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.maxType)
+    def MaxValue(self):
+        if self.maxValue == None:
+            return None
+        else:
+            return self.maxValue
+    def MaxColor(self):
+        if self.maxColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.maxColor.Blue, self.maxColor.Green, self.maxColor.Red))

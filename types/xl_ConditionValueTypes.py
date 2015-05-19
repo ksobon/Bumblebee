@@ -5,4 +5,4 @@
 dataEnteringNode = IN
 
 #Assign your output to the OUT variable
-OUT = 	["LowestValue", "Number", "Percent", "Formula", "Percentile", "HighestValue", "None"]
+OUT = 	["LowestValue", "Number", "Percent", "Formula", "Percentile", "HighestValue", "AutomaticMax", "AutomaticMin", "None"]

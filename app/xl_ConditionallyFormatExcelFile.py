@@ -68,6 +68,16 @@ def ConditionFormatCells(origin, extent, ws, formatConditions):
 		
 		if fcType == "3Color":
 			ws.Range[origin, extent].FormatConditions.AddColorScale(ColorScaleType = 3)
+		
+		if fcType == "TopPercentile":
+			ws.Range[origin, extent].FormatConditions.AddTop10()
+			if index == None:
+				index = 1
+			else:
+				index = index + 1
+			ws.Range[origin, extent].FormatConditions(index).Percent = formatConditions.Percent()
+			ws.Range[origin, extent].FormatConditions(index).Rank = formatConditions.Rank()
+			ws.Range[origin, extent].FormatConditions(index).TopBottom = formatConditions.TopBottom()
 
 		return ws
 		

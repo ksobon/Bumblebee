@@ -394,8 +394,8 @@ class BBExpressionFormatCondition(object):
             return self.graphicStyle
 
 def GetColorScaleCriteriaType(key):
-    keys = ["LowestValue", "Number", "Percent", "Formula", "Percentile", "HighestValue", "None"]
-    values = [1, 0, 3, 4, 5, 2, -1]
+    keys = ["LowestValue", "Number", "Percent", "Formula", "Percentile", "HighestValue", "AutomaticMax", "AutomaticMin", "None"]
+    values = [1, 0, 3, 4, 5, 2, 7, 6, -1]
     d = dict()
     for i in range(len(keys)):
         d[keys[i]] = values[i]
@@ -541,3 +541,72 @@ class BBTopPercentileFormatCondition(object):
             return None
         else:
             return self.graphicStyle
+
+def GetDirectionType(key):
+    keys = ["LeftToRight", "RightToLeft", "Context"]
+    values = [-5003, -5004, -5002]
+    d = dict()
+    for i in range(len(keys)):
+        d[keys[i]] = values[i]
+    if key in d:
+	return d[key]
+    else:
+	return None
+
+class BBDataBarFormatCondition(object):
+
+    def __init__(self, formatConditionType="DataBar", minType=None, minValue=None, maxType=None, maxValue=None, directionType=None, gradientFill=None, fillColor=None, borderColor=None):
+        self.formatConditionType = formatConditionType
+        self.minType = minType
+        self.minValue = minValue
+        self.maxType = maxType
+        self.maxValue = maxValue
+        self.directionType = directionType
+        self.gradientFill = gradientFill
+        self.fillColor = fillColor
+        self.borderColor = borderColor
+    def FormatConditionType(self):
+        return self.formatConditionType
+    def MinType(self):
+        if self.minType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.minType)
+    def MinValue(self):
+        if self.minValue == None:
+            return None
+        else:
+            return self.minValue
+    def MaxType(self):
+        if self.maxType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.maxType)
+    def MaxValue(self):
+        if self.maxValue == None:
+            return None
+        else:
+            return self.maxValue
+    def DirectionType(self):
+        if self.directionType == None:
+            return None
+        else:
+            return GetDirectionType(self.directionType)
+    def GradientFill(self):
+        if self.gradientFill == None:
+            return None
+        else:
+            if self.gradientFill == True:
+                return 1
+            else:
+                return 0
+    def FillColor(self):
+        if self.fillColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.fillColor.Blue, self.fillColor.Green, self.fillColor.Red))
+    def BorderColor(self):
+        if self.borderColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.borderColor.Blue, self.borderColor.Green, self.borderColor.Red))

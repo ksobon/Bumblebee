@@ -29,6 +29,10 @@ sheetName = IN[2]
 byColumn = IN[3]
 data = IN[4]
 
+def ListDepth(_list):
+	func = lambda x: isinstance(x, list) and max(map(func, x))+1
+	return func(_list)
+
 def LiveStream():
 	try:
 		xlApp = Marshal.GetActiveObject("Excel.Application")
@@ -70,21 +74,44 @@ if runMe:
 		xlApp.ScreenUpdating = False
 		if os.path.isfile(str(filePath)):
 			xlApp.Workbooks.open(str(filePath))
-			wb = xlApp.ActiveWorkbook
-			ws = xlApp.Sheets(sheetName)
-			ws.Cells.ClearContents()
-			ws.Cells.Clear()
+			if ListDepth(data) == 3 and isinstance(sheetName, list):
+				wb = xlApp.ActiveWorkbook
+				for index, (name, values) in enumerate(zip(sheetName, data)):
+					ws = xlApp.Sheets(name)
+					ws.Cells.ClearContents()
+					ws.Cells.Clear()
+					WriteData(ws, values, byColumn)
+			else:
+				wb = xlApp.ActiveWorkbook
+				ws = xlApp.Sheets(sheetName)
+				ws.Cells.ClearContents()
+				ws.Cells.Clear()
+				WriteData(ws, data, byColumn)
+			wb.SaveAs(str(filePath))
+			xlApp.ActiveWorkbook.Close(False)
+			xlApp.ScreenUpdating = True
+			Marshal.ReleaseComObject(ws)
+			Marshal.ReleaseComObject(wb)
+			Marshal.ReleaseComObject(xlApp)
 		else:
-			wb = xlApp.Workbooks.Add()
-			ws = wb.Worksheets[1]
-			ws.Name = sheetName
-		WriteData(ws, data, byColumn)
-		wb.SaveAs(str(filePath))
-		xlApp.ActiveWorkbook.Close(False)
-		xlApp.ScreenUpdating = True
-		Marshal.ReleaseComObject(ws)
-		Marshal.ReleaseComObject(wb)
-		Marshal.ReleaseComObject(xlApp)
+			if ListDepth(data) == 3 and isinstance(sheetName, list):
+				wb = xlApp.Workbooks.Add()
+				wb.Sheets.Add(After = wb.Sheets(wb.Sheets.Count), Count = len(sheetName)-1)
+				for index, (name, values) in enumerate(zip(sheetName, data)):
+					ws = wb.Worksheets[index + 1]
+					ws.Name = name
+					WriteData(ws, values, byColumn)
+			else:
+				wb = xlApp.Workbooks.Add()
+				ws = wb.Worksheets[1]
+				ws.Name = sheetName
+				WriteData(ws, data, byColumn)
+			wb.SaveAs(str(filePath))
+			xlApp.ActiveWorkbook.Close(False)
+			xlApp.ScreenUpdating = True
+			Marshal.ReleaseComObject(ws)
+			Marshal.ReleaseComObject(wb)
+			Marshal.ReleaseComObject(xlApp)
 	else:
 		message = "Close currently running Excel \nsession."
 else:

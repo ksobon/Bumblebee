@@ -12,7 +12,7 @@ Features so far:
 2. Read Excel. 
 3. Write Excel.
 4. Style Excel (border style, text style, fill style, new BB Classes instead of strings)
-5. Conditional Formatting (Cell Value and Expression are working, next up is color scale + more testing)
+5. Conditional Formatting (Cell Value, Expression, 2/3 Color Scale as well as TopBottom Percentile are working)
 
 Working on:
 

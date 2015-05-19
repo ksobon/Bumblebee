@@ -141,14 +141,19 @@ if runMe:
 			xlApp.Workbooks.open(str(filePath))
 			wb = xlApp.ActiveWorkbook
 			ws = xlApp.Sheets(sheetName)
-			if cellRange != None:
+			if not isinstance(cellRange, list):
 				origin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])
 				extent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])
 				ConditionFormatCells(origin, extent, ws, formatConditions)
 				Marshal.ReleaseComObject(extent)
 				Marshal.ReleaseComObject(origin)
 			else:
-				message = "Range and Style List cannot be combined. Please either use Range with single item Styles or styles as list input"
+				for index, (range, format) in enumerate(zip(cellRange, formatConditions)):
+					origin = ws.Cells(bb.xlRange(range)[1], bb.xlRange(range)[0])
+					extent = ws.Cells(bb.xlRange(range)[3], bb.xlRange(range)[2])
+					ConditionFormatCells(origin, extent, ws, format)
+					Marshal.ReleaseComObject(extent)
+					Marshal.ReleaseComObject(origin)
 			wb.SaveAs(str(filePath))
 			xlApp.ActiveWorkbook.Close(False)
 			xlApp.ScreenUpdating = True

@@ -78,6 +78,9 @@ def ConditionFormatCells(origin, extent, ws, formatConditions):
 			ws.Range[origin, extent].FormatConditions(index).Percent = formatConditions.Percent()
 			ws.Range[origin, extent].FormatConditions(index).Rank = formatConditions.Rank()
 			ws.Range[origin, extent].FormatConditions(index).TopBottom = formatConditions.TopBottom()
+		
+		if fcType == "DataBar":
+			ws.Range[origin, extent].FormatConditions.AddDataBar()
 
 		return ws
 		
@@ -105,6 +108,26 @@ def ConditionFormatCells(origin, extent, ws, formatConditions):
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Type = formatConditions.MidType()
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).FormatColor.Color = formatConditions.MidColor()
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MidValue()
+		
+		elif formatConditions.FormatConditionType() == "DataBar":
+			if formatConditions.MinType() != 1 and formatConditions.MinType() != 6:
+				ws.Range[origin, extent].FormatConditions(index).MinPoint.Modify(newtype = formatConditions.MinType(), newvalue = formatConditions.MinValue())
+			else:
+				ws.Range[origin, extent].FormatConditions(index).MinPoint.Modify(newtype = formatConditions.MinType())
+			if formatConditions.MaxType() != 2 and formatConditions.MaxType() != 7:
+				ws.Range[origin, extent].FormatConditions(index).MaxPoint.Modify(newtype = formatConditions.MaxType(), newvalue = formatConditions.MaxValue())
+			else:
+				ws.Range[origin, extent].FormatConditions(index).MaxPoint.Modify(newtype = formatConditions.MaxType())
+			
+			if formatConditions.BorderColor() != None:
+				ws.Range[origin, extent].FormatConditions(index).BarBorder.Type = 1
+			else:
+				ws.Range[origin, extent].FormatConditions(index).BarBorder.Type = 0
+			ws.Range[origin, extent].FormatConditions(index).ShowValue = True
+			ws.Range[origin, extent].FormatConditions(index).BarFillType = formatConditions.GradientFill()
+			ws.Range[origin, extent].FormatConditions(index).BarColor.Color = formatConditions.FillColor()
+			ws.Range[origin, extent].FormatConditions(index).BarBorder.Color.Color = formatConditions.BorderColor()
+			ws.Range[origin, extent].FormatConditions(index).Direction = formatConditions.DirectionType()
 
 		else:
 			fillStyle = formatConditions.GraphicStyle().fillStyle

@@ -65,11 +65,10 @@ def ConditionFormatCells(origin, extent, ws, formatConditions):
 			
 		if fcType == "2Color":
 			ws.Range[origin, extent].FormatConditions.AddColorScale(ColorScaleType = 2)
-			
-			#if formatConditions.MinType() != 1:
-				#ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Value = formatConditions.MinValue()
-			#if formatConditions.MaxType() != 2:
-				#ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MaxValue()
+		
+		if fcType == "3Color":
+			ws.Range[origin, extent].FormatConditions.AddColorScale(ColorScaleType = 3)
+
 		return ws
 		
 	def FormatGraphics(origin=None, extent=None, ws=None, formatConditions=None, index=None):
@@ -77,11 +76,26 @@ def ConditionFormatCells(origin, extent, ws, formatConditions):
 			index = 1
 		else:
 			index = index + 1
+			
 		if formatConditions.FormatConditionType() == "2Color":
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Type = formatConditions.MinType()
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).FormatColor.Color = formatConditions.MinColor()
+			if formatConditions.MinType() != 1:
+				ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Value = formatConditions.MinValue()
+			if formatConditions.MaxType() != 2:
+				ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MaxValue()
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Type = formatConditions.MaxType()
 			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).FormatColor.Color = formatConditions.MaxColor()
+			
+		elif formatConditions.FormatConditionType() == "3Color":
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Type = formatConditions.MinType()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).FormatColor.Color = formatConditions.MinColor()
+			if formatConditions.MinType() != 1:
+				ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Value = formatConditions.MinValue()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Type = formatConditions.MidType()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).FormatColor.Color = formatConditions.MidColor()
+			ws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MidValue()
+
 		else:
 			fillStyle = formatConditions.GraphicStyle().fillStyle
 			textStyle = formatConditions.GraphicStyle().textStyle

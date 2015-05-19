@@ -446,3 +446,98 @@ class BB2ColorScaleFormatCondition(object):
             return None
         else:
             return RGBToRGBLong((self.maxColor.Blue, self.maxColor.Green, self.maxColor.Red))
+
+class BB3ColorScaleFormatCondition(object):
+
+    def __init__(self, formatConditionType="3Color", minType=None, minValue=None, minColor=None, midType=None, midValue=None, midColor=None, maxType=None, maxValue=None, maxColor=None):
+        self.formatConditionType = formatConditionType
+        self.minType = minType
+        self.minValue = minValue
+        self.minColor = minColor
+        self.midType = midType
+        self.midValue = midValue
+        self.midColor = midColor
+        self.maxType = maxType
+        self.maxValue = maxValue
+        self.maxColor = maxColor
+    def FormatConditionType(self):
+        return self.formatConditionType
+    def MinType(self):
+        if self.minType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.minType)
+    def MinValue(self):
+        if self.minValue == None:
+            return None
+        else:
+            return self.minValue
+    def MinColor(self):
+        if self.minColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.minColor.Blue, self.minColor.Green, self.minColor.Red))
+    def MidType(self):
+        if self.midType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.midType)
+    def MidValue(self):
+        if self.midValue == None:
+            return None
+        else:
+            return self.midValue
+    def MidColor(self):
+        if self.midColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.midColor.Blue, self.midColor.Green, self.midColor.Red))
+    def MaxType(self):
+        if self.maxType == None:
+            return None
+        else:
+            return GetColorScaleCriteriaType(self.maxType)
+    def MaxValue(self):
+        if self.maxValue == None:
+            return None
+        else:
+            return self.maxValue
+    def MaxColor(self):
+        if self.maxColor == None:
+            return None
+        else:
+            return RGBToRGBLong((self.maxColor.Blue, self.maxColor.Green, self.maxColor.Red))
+
+class BBTopPercentileFormatCondition(object):
+
+    def __init__(self, formatConditionType="TopPercentile", percent=None, rank=None, topBottom=None, graphicStyle=None):
+        self.formatConditionType = formatConditionType
+        self.percent = percent
+        self.rank = rank
+        self.topBottom = topBottom
+        self.graphicStyle = graphicStyle
+    def FormatConditionType(self):
+        return self.formatConditionType
+    def Percent(self):
+        if self.percent == None:
+            return None
+        else:
+            return self.percent
+    def Rank(self):
+        if self.rank == None:
+            return None
+        else:
+            return self.rank
+    def TopBottom(self):
+        if self.topBottom == None:
+            return None
+        else:
+            if self.topBottom == True:
+                return 1
+            else:
+                return 0
+    def GraphicStyle(self):
+        if self.graphicStyle == None:
+            return None
+        else:
+            return self.graphicStyle

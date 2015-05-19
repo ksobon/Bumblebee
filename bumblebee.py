@@ -69,81 +69,6 @@ def xlRange(address):
     extentCol = int(CellIndex(extentAddress)[1])
     return [originRow, originCol, extentRow, extentCol]
 
-def ParseFillSettings(fillStyle):
-    paramList = fillStyle.split("~")
-    patternType = GetPatternType(paramList[0])
-    # if pattern type is supplied then it needs a background color
-    # to be set so if no background color supplied it will be assigned 
-    # a default value of white
-    if paramList[1] == "xlNone" and paramList[0] == "xlNone":
-    	backColor = -4142
-    elif paramList[1] == "xlNone" and paramList[0] != "xlNone":
-    	backColor = RGBToRGBLong((255,255,255))
-    else:
-    	bColors = paramList[1].split(",")
-    	backColor = RGBToRGBLong((int(bColors[2]), int(bColors[1]), int(bColors[0])))
-    if paramList[2] == "xlNone" and paramList[0] == "xlNone":
-    	foreColor = -4142
-    elif paramList[2] == "xlNone" and paramList[0] != "xlNone":
-    	foreColor = RGBToRGBLong((0,0,0))
-    else:
-    	fColors = paramList[2].split(",")
-    	foreColor = RGBToRGBLong((int(fColors[2]), int(fColors[1]), int(fColors[0])))
-    return [patternType, backColor, foreColor]
-
-def ParseTextStyle(textStyle):
-    paramList = textStyle.split("~")
-    name = paramList[0]
-    size = int(paramList[1])
-    colorParts = paramList[2].split(",")
-    color = RGBToRGBLong((int(colorParts[2]), int(colorParts[1]), int(colorParts[0])))
-    hAlign = GetTextHorJustType(paramList[3])
-    vAlign = GetTextVerJustType(paramList[4])
-    if paramList[5] == "True":
-        bold = True
-    else:
-        bold = False
-    if paramList[6] == "True":
-        italic = True
-    else:
-        italic = False
-    if paramList[7] == "True":
-        underline = True
-    else:
-        underline = False
-    if paramList[8] == "True":
-        strikethrough = True
-    else:
-        strikethrough = False
-    return [name, size, color, hAlign, vAlign, bold, italic, underline, strikethrough]
-
-def ParseBorderStyle(borderStyle):
-    paramList = borderStyle.split("~")
-    lineType = GetLineType(paramList[0]) 
-    lineWeight = GetLineWeight(paramList[1])
-    colorParts = paramList[2].split(",")
-    lineColor = RGBToRGBLong((int(colorParts[2]), int(colorParts[1]), int(colorParts[0])))
-    return [lineType, lineWeight, lineColor]
-
-def CheckInputs(fillStyle, textStyle, borderStyle):
-    styleSettingsCheck = []
-    if fillStyle != None and any(isinstance(item, list) for item in fillStyle):
-    	styleSettingsCheck.append(True)
-    else:
-    	styleSettingsCheck.append(False)
-    if textStyle != None and any(isinstance(item, list) for item in textStyle):
-    	styleSettingsCheck.append(True)
-    else:
-    	styleSettingsCheck.append(False)
-    if borderStyle != None and any(isinstance(item, list) for item in borderStyle):
-    	styleSettingsCheck.append(True)
-    else:
-    	styleSettingsCheck.append(False)
-    if any(styleSettingsCheck):
-    	return True
-    else:
-    	return False
-
 def RGBToRGBLong(rgb):
     strValue = '%02x%02x%02x' % rgb
     iValue = int(strValue, 16)
@@ -323,18 +248,7 @@ class BBGraphicStyle(object):
         self.fillStyle = fillStyle
         self.textStyle = textStyle
         self.borderStyle = borderStyle
-"""
-def GetFormatConditionType(key):
-    keys = ["CellValue", "Expression"]
-    values = [1, 2]
-    d = dict()
-    for i in range(len(keys)):
-        d[keys[i]] = values[i]
-    if key in d:
-	return d[key]
-    else:
-	return None
-"""
+
 def GetOperatorType(key):
     keys = ["Equal", "NotEqual", "Greater", "GreaterEqual", "Less", "LessEqual", "Between", "NotBetween"]
     values = [3, 4, 5, 7, 6, 8, 1, 2]

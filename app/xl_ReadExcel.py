@@ -47,6 +47,25 @@ def ReadData(ws, origin, extent, byColumn):
 				dataOut[i].append(rng[j,i])
 		return dataOut
 
+def CleanUp(_list):
+	if isinstance(_list, list):
+		for i in _list:
+			Marshal.ReleaseComObject(i)
+	else:
+		Marshal.ReleaseComObject(_list)
+	return None
+
+def GetOriginExtent(ws, origin, extent):
+	if origin != None:
+		origin = ws.Cells(origin[1], origin[0])
+	else:
+		origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
+	if extent != None:
+		extent = ws.Cells(extent[1], extent[0])
+	else:
+		extent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)
+	return origin, extent
+
 if runMe:
 	message = None
 	xlApp = Excel.ApplicationClass()
@@ -58,22 +77,28 @@ if runMe:
 			xlApp.Workbooks.open(str(filePath))
 		except:
 			message = "Excel might be open. Please close it!"
-		wb = xlApp.ActiveWorkbook
-		ws = xlApp.Sheets(sheetName)
-		if origin != None:
-			origin = ws.Cells(origin[1], origin[0])
+		if not isinstance(sheetName, list):
+			wb = xlApp.ActiveWorkbook
+			ws = xlApp.Sheets(sheetName)
+			dataOut = ReadData(ws, GetOriginExtent(ws, origin, extent)[0], GetOriginExtent(ws, origin, extent)[1], byColumn)
+			xlApp.ActiveWorkbook.Close(False)
+			xlApp.ScreenUpdating = True
+			CleanUp([ws,wb,xlApp])
 		else:
-			origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
-		if extent != None:
-			extent = ws.Cells(extent[1], extent[0])
-		else:
-			extent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)
-		dataOut = ReadData(ws, origin, extent, byColumn)
-	xlApp.ActiveWorkbook.Close(False)
-	xlApp.ScreenUpdating = True
-	Marshal.ReleaseComObject(ws)
-	Marshal.ReleaseComObject(wb)
-	Marshal.ReleaseComObject(xlApp)
+			dataOut = []
+			wb = xlApp.ActiveWorkbook
+			resetOrigin = [lambda:False, lambda:True][origin==None]()
+			resetExtent = [lambda:False, lambda:True][extent==None]()
+			for i in sheetName:
+				ws = xlApp.Sheets(str(i))
+				dataOut.append(ReadData(ws, GetOriginExtent(ws, origin, extent)[0], GetOriginExtent(ws, origin, extent)[1], byColumn))
+				if resetOrigin:
+					origin = None
+				if resetExtent:
+					extent = None
+			xlApp.ActiveWorkbook.Close(False)
+			xlApp.ScreenUpdating = True
+			CleanUp([ws,wb,xlApp])
 else:
 	message = "Set RunMe to True."
 

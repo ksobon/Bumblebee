@@ -55,16 +55,19 @@ def CleanUp(_list):
 		Marshal.ReleaseComObject(_list)
 	return None
 
-def GetOriginExtent(ws, origin, extent):
+def GetOrigin(ws, origin):
 	if origin != None:
 		origin = ws.Cells(origin[1], origin[0])
 	else:
 		origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
+	return origin
+
+def GetExtent(ws, extent):
 	if extent != None:
 		extent = ws.Cells(extent[1], extent[0])
 	else:
 		extent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)
-	return origin, extent
+	return extent
 
 if runMe:
 	message = None
@@ -87,15 +90,24 @@ if runMe:
 		else:
 			dataOut = []
 			wb = xlApp.ActiveWorkbook
-			resetOrigin = [lambda:False, lambda:True][origin==None]()
-			resetExtent = [lambda:False, lambda:True][extent==None]()
-			for i in sheetName:
-				ws = xlApp.Sheets(str(i))
-				dataOut.append(ReadData(ws, GetOriginExtent(ws, origin, extent)[0], GetOriginExtent(ws, origin, extent)[1], byColumn))
-				if resetOrigin:
-					origin = None
-				if resetExtent:
-					extent = None
+			if isinstance(origin, list):
+				if isinstance(extent, list):
+					for index, (name, oValue, eValue) in enumerate(zip(sheetName, origin, extent)):
+						ws = xlApp.Sheets(str(name))
+						dataOut.append(ReadData(ws, GetOrigin(ws, oValue), GetExtent(ws, eValue), byColumn))
+				else:
+					for index, (name, oValue) in enumerate(zip(sheetName, origin)):
+						ws = xlApp.Sheets(str(name))
+						dataOut.append(ReadData(ws, GetOrigin(ws, oValue), GetExtent(ws, extent), byColumn))
+			else:
+				if isinstance(extent, list):
+					for index, (name, eValue) in enumerate(zip(sheetName, extent)):
+						ws = xlApp.Sheets(str(name))
+						dataOut.append(ReadData(ws, GetOrigin(ws, origin), GetExtent(ws, eValue), byColumn))
+				else:
+					for index, name in enumerate(sheetName):
+						ws = xlApp.Sheets(str(name))
+						dataOut.append(ReadData(ws, GetOrigin(ws, origin), GetExtent(ws, extent), byColumn))
 			xlApp.ActiveWorkbook.Close(False)
 			xlApp.ScreenUpdating = True
 			CleanUp([ws,wb,xlApp])

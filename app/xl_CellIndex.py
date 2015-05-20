@@ -9,7 +9,7 @@ sys.path.append(pyt_path)
 
 import os
 appDataPath = os.getenv('APPDATA')
-bbPath = appDataPath + r"\Dynamo\0.7\packages\Bumblebee\extra"
+bbPath = appDataPath + r"\Dynamo\0.8\packages\Bumblebee\extra"
 if bbPath not in sys.path:
 	sys.path.Add(bbPath)
 
@@ -20,14 +20,12 @@ import re
 #The inputs to this node will be stored as a list in the IN variable.
 dataEnteringNode = IN
 
-cellAddress = str(IN[0])
+cellAddress = IN[0]
 
-match = re.match(r"([a-z]+)([0-9]+)", cellAddress, re.I)
-if match:
-    addressItems = match.groups()
+def ProcessList(_func, _list):
+    return map( lambda x: ProcessList(_func, x) if type(x)==list else _func(x), _list )
 
-row = bb.ConvertChar(addressItems[0])
-column = int(addressItems[1])
-	
-#Assign your output to the OUT variable
-OUT = row, column
+if isinstance(cellAddress, list):
+	OUT = ProcessList(bb.CellIndex, cellAddress)
+else:
+	OUT = bb.CellIndex(cellAddress)

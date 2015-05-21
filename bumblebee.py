@@ -524,3 +524,41 @@ class BBDataBarFormatCondition(object):
             return None
         else:
             return RGBToRGBLong((self.borderColor.Blue, self.borderColor.Green, self.borderColor.Red))
+
+def ListDepth(_list):
+	func = lambda x: isinstance(x, list) and max(map(func, x))+1
+	return func(_list)
+
+class BBData(object):
+
+    def __init__(self, sheetName=None, origin=None, data=None):
+        self.sheetName = sheetName
+        self.origin = origin
+        self.data = data
+    def Depth(self):
+        return ListDepth(self.data)
+    def SheetName(self):
+        if self.sheetName == None:
+            return None
+        else:
+            return self.sheetName
+    def Origin(self):
+        if self.origin == None:
+            return None
+        else:
+            return CellIndex(self.origin)
+    def Data(self):
+        if self.data == None:
+            return None
+        else:
+            return self.data
+
+def MakeDataObject(sheetName=None, origin=None, data=None):
+	dataObject = BBData()
+	if sheetName != None:
+		dataObject.sheetName = sheetName
+	if origin != None:
+		dataObject.origin = origin
+	if data != None:
+		dataObject.data = data
+	return dataObject

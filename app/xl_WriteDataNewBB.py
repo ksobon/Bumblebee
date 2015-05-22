@@ -56,8 +56,8 @@ def WriteData(ws, data, byColumn, origin):
 
 	def FillData(x, y, x1, y1, ws, data, origin):
 		if origin != None:
-			x = x + origin[0]
-			y = y + origin[1]
+			x = x + origin[1]
+			y = y + origin[0]
 		else:
 			x = x + 1
 			y = y + 1
@@ -103,26 +103,46 @@ if runMe:
 	if LiveStream() == None:
 		if os.path.isfile(str(filePath)):
 			if not isinstance(data, list):
-				if data.Depth() == 1 or data.Depth() == 2:
-					xlApp = SetUp(Excel.ApplicationClass())
-					xlApp.Workbooks.open(str(filePath))
-					wb = xlApp.ActiveWorkbook
-					ws = xlApp.Sheets(data.SheetName())
-					ws.Cells.ClearContents()
-					ws.Cells.Clear()
-					WriteData(ws, data.Data(), byColumn, data.Origin())
-					ExitExcel(filePath, xlApp, wb, ws)
+				xlApp = SetUp(Excel.ApplicationClass())
+				xlApp.Workbooks.open(str(filePath))
+				wb = xlApp.ActiveWorkbook
+				ws = xlApp.Sheets(data.SheetName())
+				ws.Cells.ClearContents()
+				ws.Cells.Clear()
+				WriteData(ws, data.Data(), byColumn, data.Origin())
+				ExitExcel(filePath, xlApp, wb, ws)
 			else:
+				xlApp = SetUp(Excel.ApplicationClass())
+				xlApp.Workbooks.open(str(filePath))
+				wb = xlApp.ActiveWorkbook
+				sheetNameSet = set([x.SheetName() for x in data])
+				for i in range(0,len(sheetNameSet),1):
+					wb.Worksheets[i+1].Cells.ClearContents()
+					wb.Worksheets[i+1].Cells.Clear()
 				for i in data:
-					if i.Depth() == 1 or i.Depth() == 2:
-						xlApp = SetUp(Excel.ApplicationClass())
-						xlApp.Workbooks.open(str(filePath))
-						wb = xlApp.ActiveWorkbook
-						ws = xlApp.Sheets(i.SheetName())
-						ws.Cells.ClearContents()
-						ws.Cells.Clear()
-						WriteData(ws, i.Data(), byColumn, i.Origin())
-						ExitExcel(filePath, xlApp, wb, ws)	
+					ws = xlApp.Sheets(i.SheetName())
+					WriteData(ws, i.Data(), byColumn, i.Origin())
+				ExitExcel(filePath, xlApp, wb, ws)
+		else:
+			if not isinstance(data, list):
+				xlApp = SetUp(Excel.ApplicationClass())
+				wb = xlApp.Workbooks.Add()
+				ws = wb.Worksheets[1]
+				ws.Name = data.SheetName()
+				WriteData(ws, data.Data(), byColumn, data.Origin())
+				ExitExcel(filePath, xlApp, wb, ws)
+			else:
+				sheetNameSet = set([x.SheetName() for x in data])
+				sheetNameList = list(sheetNameSet)
+				xlApp = SetUp(Excel.ApplicationClass())
+				wb = xlApp.Workbooks.Add()
+				wb.Sheets.Add(After = wb.Sheets(wb.Sheets.Count), Count = len(sheetNameSet)-1)
+				for i in range(0,len(sheetNameSet),1):
+					wb.Worksheets[i+1].Name = sheetNameList[i]
+				for i in data:
+					ws = xlApp.Sheets(i.SheetName())
+					WriteData(ws , i.Data(), byColumn, i.Origin())
+				ExitExcel(filePath, xlApp, wb, ws)					
 	else:
 		message = "Close currently running Excel \nsession."
 else:

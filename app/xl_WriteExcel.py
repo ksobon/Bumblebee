@@ -38,6 +38,7 @@ byColumn = IN[2]
 data = IN[3]
 
 def LiveStream():
+	# Checks if Excel is already open
 	try:
 		xlApp = Marshal.GetActiveObject("Excel.Application")
 		xlApp.Visible = True
@@ -47,6 +48,7 @@ def LiveStream():
 		return None
 
 def SetUp(xlApp):
+	# supress updates and warning pop ups
 	xlApp.Visible = False
 	xlApp.DisplayAlerts = False
 	xlApp.ScreenUpdating = False
@@ -66,7 +68,7 @@ def WriteData(ws, data, byColumn, origin):
 		else:
 			ws.Cells[x, y] = data[x1]
 		return ws
-
+	# if data is a nested list (multi column/row) use this
 	if any(isinstance(item, list) for item in data):
 		for i, valueX in enumerate(data):
 			for j, valueY in enumerate(valueX):
@@ -74,6 +76,7 @@ def WriteData(ws, data, byColumn, origin):
 					FillData(j,i,i,j, ws, data, origin)
 				else:
 					FillData(i,j,i,j, ws, data, origin)
+	# if data is just a flat list (single column/row) use this
 	else:
 		for i, valueX in enumerate(data):
 			if byColumn:
@@ -83,7 +86,8 @@ def WriteData(ws, data, byColumn, origin):
 	return ws
 
 def ExitExcel(filePath, xlApp, wb, ws):
-
+	# clean up before exiting excel, if any COM object remains
+	# unreleased then excel crashes on open following time
 	def CleanUp(_list):
 		if isinstance(_list, list):
 			for i in _list:
@@ -102,6 +106,8 @@ if runMe:
 	message = None
 	if LiveStream() == None:
 		if os.path.isfile(str(filePath)):
+			# if excel file already exists and data is being written
+			# to single sheet
 			if not isinstance(data, list):
 				xlApp = SetUp(Excel.ApplicationClass())
 				xlApp.Workbooks.open(str(filePath))
@@ -111,6 +117,8 @@ if runMe:
 				ws.Cells.Clear()
 				WriteData(ws, data.Data(), byColumn, data.Origin())
 				ExitExcel(filePath, xlApp, wb, ws)
+			# if excel file already exists but data is being written
+			# to multiple sheets
 			else:
 				xlApp = SetUp(Excel.ApplicationClass())
 				xlApp.Workbooks.open(str(filePath))
@@ -124,6 +132,8 @@ if runMe:
 					WriteData(ws, i.Data(), byColumn, i.Origin())
 				ExitExcel(filePath, xlApp, wb, ws)
 		else:
+			# if excel file doesn't exist and data is being written
+			# to a single sheet
 			if not isinstance(data, list):
 				xlApp = SetUp(Excel.ApplicationClass())
 				wb = xlApp.Workbooks.Add()
@@ -131,6 +141,8 @@ if runMe:
 				ws.Name = data.SheetName()
 				WriteData(ws, data.Data(), byColumn, data.Origin())
 				ExitExcel(filePath, xlApp, wb, ws)
+			# if excel file doesn't exist and data is being written
+			# to multiple sheets
 			else:
 				sheetNameSet = set([x.SheetName() for x in data])
 				sheetNameList = list(sheetNameSet)

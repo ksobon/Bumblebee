@@ -25,8 +25,6 @@ System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.Cult
 from System.Runtime.InteropServices import Marshal
 
 import bumblebee as bb
-import string
-import re
 
 #The inputs to this node will be stored as a list in the IN variable.
 dataEnteringNode = IN
@@ -86,8 +84,10 @@ if runMe:
 			else:
 				origin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)
 				extent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)
+			# clear contents of the cells only
 			if clearContent:
 				ws.Range[origin, extent].ClearContents()
+			# clear cell formatting settings only
 			if clearFormat:
 				ws.Range[origin, extent].ClearFormats()
 			

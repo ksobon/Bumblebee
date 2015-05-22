@@ -22,6 +22,8 @@ sheetName = IN[0]
 origin = IN[1]
 data = IN[2]
 
+# Make BBData object if list or make multiple BBData objects if
+# list depth == 3
 if isinstance(sheetName, list):
 	if isinstance(origin, list):
 		dataObjectList = []

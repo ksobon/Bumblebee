@@ -10,7 +10,7 @@ sys.path.append(pyt_path)
 import os
 import os.path
 appDataPath = os.getenv('APPDATA')
-bbPath = appDataPath + r"\Dynamo\0.7\packages\Bumblebee\extra"
+bbPath = appDataPath + r"\Dynamo\0.8\packages\Bumblebee\extra"
 if bbPath not in sys.path:
 	sys.path.Add(bbPath)
 
@@ -39,6 +39,7 @@ clearFormat = IN[4]
 cellRange = IN[5]
 
 def LiveStream():
+	# Checks if Excel is already open
 	try:
 		xlApp = Marshal.GetActiveObject("Excel.Application")
 		xlApp.Visible = True
@@ -47,13 +48,34 @@ def LiveStream():
 	except:
 		return None
 
+def SetUp(xlApp):
+	# supress updates and warning pop ups
+	xlApp.Visible = False
+	xlApp.DisplayAlerts = False
+	xlApp.ScreenUpdating = False
+	return xlApp
+
+def ExitExcel(filePath, xlApp, wb, ws):
+	# clean up before exiting excel, if any COM object remains
+	# unreleased then excel crashes on open following time
+	def CleanUp(_list):
+		if isinstance(_list, list):
+			for i in _list:
+				Marshal.ReleaseComObject(i)
+		else:
+			Marshal.ReleaseComObject(_list)
+		return None
+	
+	wb.SaveAs(str(filePath))
+	xlApp.ActiveWorkbook.Close(False)
+	xlApp.ScreenUpdating = True
+	CleanUp([ws,wb,xlApp])
+	return None
+
 if runMe:
 	message = None
 	if LiveStream() == None:
-		xlApp = Excel.ApplicationClass()
-		xlApp.Visible = False
-		xlApp.DisplayAlerts = False
-		xlApp.ScreenUpdating = False
+		xlApp = SetUp(Excel.ApplicationClass())
 		if os.path.isfile(str(filePath)):
 			xlApp.Workbooks.open(str(filePath))
 			wb = xlApp.ActiveWorkbook
@@ -68,15 +90,13 @@ if runMe:
 				ws.Range[origin, extent].ClearContents()
 			if clearFormat:
 				ws.Range[origin, extent].ClearFormats()
-			wb.SaveAs(str(filePath))
-			xlApp.ActiveWorkbook.Close(False)
-			xlApp.ScreenUpdating = True
 			
 			Marshal.ReleaseComObject(extent)
 			Marshal.ReleaseComObject(origin)
-			Marshal.ReleaseComObject(ws)
-			Marshal.ReleaseComObject(wb)
-			Marshal.ReleaseComObject(xlApp)
+			ExitExcel(filePath, xlApp, wb, ws)
+		else:
+			message = "Specified file doesn't exists."	
+
 	else:
 		message = "Close currently running Excel \nsession."
 else:

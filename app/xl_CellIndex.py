@@ -25,6 +25,8 @@ cellAddress = IN[0]
 def ProcessList(_func, _list):
     return map( lambda x: ProcessList(_func, x) if type(x)==list else _func(x), _list )
 
+# if input is a list iterate over it and return
+# a list of row index and column index for each
 if isinstance(cellAddress, list):
 	OUT = ProcessList(bb.CellIndex, cellAddress)
 else:

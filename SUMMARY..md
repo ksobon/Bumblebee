@@ -1,4 +1,4 @@
 # Summary
 
-* Miscellaneous Functionality
+* [Miscellaneous Functionality](miscellaneous_functionality.md)
 

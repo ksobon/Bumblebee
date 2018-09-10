@@ -1,0 +1,363 @@
+{
+  "Uuid": "43ac48f5-8093-4c9b-94ac-19a233c0bc06",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.Format",
+  "Description": "This node will allow you to apply conditional formatting to an Excel document or a specific range within the document.",
+  "Name": "Conditionally Format Excel",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "filePath",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "eac6f56266b242869189ab7e8d034fe1",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8b21afda1b7747e8b27f8f2874d7ecd6",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "RunIt",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": ""
+      },
+      "Id": "f93950f07e8341198e8dd943c76ff86c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2da0985349e24743bc6d3de423a2e637",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "SheetName",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "37f8e56eddbb4bc29f399d076553a4e0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "43966457a1f2432abde2024ccfc89df4",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "CellRange",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "33cce86e77d648a383e6cd5804d77416",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "515a8d66973b491ea92b778b2f9a8fac",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "FormatConditions",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "1e26983a8ec94639aa1d859a9b02b266",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bee5ce018db04499ad38c77548dec931",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "OUT",
+      "Id": "15cbc59a4d0e4f3abb1c2ca20dacdd13",
+      "Inputs": [
+        {
+          "Id": "3afc9804622b4cbbaf2554baeadf7b19",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\nimport System\nfrom System import Array\nfrom System.Collections.Generic import *\n\nclr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')\nfrom Microsoft.Office.Interop import Excel\nSystem.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo(\"en-US\")\nfrom System.Runtime.InteropServices import Marshal\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nimport System\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\n\nimport bumblebee as bb\nimport string\nimport re\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\nfilePath = IN[0]\nrunMe = IN[1]\nsheetName = IN[2]\ncellRange = IN[3]\nformatConditions = IN[4]\n\nif filePath != None:\n\tif filePath.GetType() == System.IO.FileInfo:\n\t\tfilePath = filePath.FullName\n\ndef SetUp(xlApp):\n\t# supress updates and warning pop ups\n\txlApp.Visible = False\n\txlApp.DisplayAlerts = False\n\txlApp.ScreenUpdating = False\n\treturn xlApp\n\ndef CleanUp(_list):\n\t# clean up before exiting excel, if any COM object remains\n\t# unreleased then excel crashes on open following time\n\tif isinstance(_list, list):\n\t\tfor i in _list:\n\t\t\ttry:\n\t\t\t\tMarshal.ReleaseComObject(i)\n\t\t\texcept:\n\t\t\t\tpass\n\telse:\n\t\ttry:\n\t\t\tMarshal.ReleaseComObject(_list)\n\t\texcept:\n\t\t\tpass\n\treturn None\n\ndef ExitExcel(filePath, xlApp, wb, ws):\n\t# save any changes and clean up excel sessions\n\twb.SaveAs(unicode(filePath))\n\txlApp.ActiveWorkbook.Close(False)\n\txlApp.ScreenUpdating = True\n\tCleanUp([ws,wb,xlApp])\n\treturn None\n\ndef LiveStream():\n\ttry:\n\t\txlApp = Marshal.GetActiveObject(\"Excel.Application\")\n\t\txlApp.Visible = True\n\t\txlApp.DisplayAlerts = False\n\t\treturn xlApp\n\texcept:\n\t\treturn None\n\ndef ConditionFormatCells(origin, extent, ws, formatConditions):\n\t\n\tdef AddFormatCondition(origin=None, extent=None, ws=None, formatConditions=None, index=None):\n\t\tfcType = formatConditions.FormatConditionType()\n\t\tif fcType == 1:\n\t\t\toperatorType = formatConditions.OperatorType()\n\t\t\tvalues = formatConditions.Values()\n\t\t\tif operatorType == 2 or operatorType == 1:\n\t\t\t\tws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values[1], values[0])\n\t\t\telse:\n\t\t\t\tws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, values)\n\t\t\t\t\n\t\tif fcType == 2:\n\t\t\toperatorType = formatConditions.OperatorType()\n\t\t\texpression = formatConditions.Expression()\n\t\t\tws.Range[origin, extent].FormatConditions.Add(fcType, operatorType, expression)\n\t\t\t\n\t\tif fcType == \"2Color\":\n\t\t\tws.Range[origin, extent].FormatConditions.AddColorScale(ColorScaleType = 2)\n\t\t\n\t\tif fcType == \"3Color\":\n\t\t\tws.Range[origin, extent].FormatConditions.AddColorScale(ColorScaleType = 3)\n\t\t\n\t\tif fcType == \"TopPercentile\":\n\t\t\tws.Range[origin, extent].FormatConditions.AddTop10()\n\t\t\tif index == None:\n\t\t\t\tindex = 1\n\t\t\telse:\n\t\t\t\tindex = index + 1\n\t\t\tws.Range[origin, extent].FormatConditions(index).Percent = formatConditions.Percent()\n\t\t\tws.Range[origin, extent].FormatConditions(index).Rank = formatConditions.Rank()\n\t\t\tws.Range[origin, extent].FormatConditions(index).TopBottom = formatConditions.TopBottom()\n\n\t\tif fcType == \"DataBar\":\n\t\t\tws.Range[origin, extent].FormatConditions.AddDataBar()\n\n\t\treturn ws\n\t\t\n\tdef FormatGraphics(origin=None, extent=None, ws=None, formatConditions=None, index=None):\n\t\tif index == None:\n\t\t\tindex = 1\n\t\telse:\n\t\t\tindex = index + 1\n\t\t\t\n\t\tif formatConditions.FormatConditionType() == \"2Color\":\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Type = formatConditions.MinType()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).FormatColor.Color = formatConditions.MinColor()\n\t\t\tif formatConditions.MinType() != 1:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Value = formatConditions.MinValue()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Type = formatConditions.MaxType()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).FormatColor.Color = formatConditions.MaxColor()\n\t\t\tif formatConditions.MaxType() != 2:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MaxValue()\n\t\t\t\n\t\telif formatConditions.FormatConditionType() == \"3Color\":\n\t\t\t# set min type/value/color\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Type = formatConditions.MinType()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).FormatColor.Color = formatConditions.MinColor()\n\t\t\tif formatConditions.MinType() != 1:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(1).Value = formatConditions.MinValue()\n\t\t\t# set mid type/value/color\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Type = formatConditions.MidType()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).FormatColor.Color = formatConditions.MidColor()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(2).Value = formatConditions.MidValue()\n\t\t\t# set max type/value/color\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(3).Type = formatConditions.MaxType()\n\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(3).FormatColor.Color = formatConditions.MaxColor()\n\t\t\tif formatConditions.MaxType() != 2:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).ColorScaleCriteria(3).Value = formatConditions.MaxValue()\n\t\t\n\t\telif formatConditions.FormatConditionType() == \"DataBar\":\n\t\t\tif formatConditions.MinType() != 1 and formatConditions.MinType() != 6:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).MinPoint.Modify(newtype = formatConditions.MinType(), newvalue = formatConditions.MinValue())\n\t\t\telse:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).MinPoint.Modify(newtype = formatConditions.MinType())\n\t\t\tif formatConditions.MaxType() != 2 and formatConditions.MaxType() != 7:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).MaxPoint.Modify(newtype = formatConditions.MaxType(), newvalue = formatConditions.MaxValue())\n\t\t\telse:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).MaxPoint.Modify(newtype = formatConditions.MaxType())\n\t\t\t\n\t\t\tif formatConditions.BorderColor() != None:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).BarBorder.Type = 1\n\t\t\telse:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).BarBorder.Type = 0\n\t\t\tws.Range[origin, extent].FormatConditions(index).ShowValue = True\n\t\t\tws.Range[origin, extent].FormatConditions(index).BarFillType = formatConditions.GradientFill()\n\t\t\tws.Range[origin, extent].FormatConditions(index).BarColor.Color = formatConditions.FillColor()\n\t\t\tws.Range[origin, extent].FormatConditions(index).BarBorder.Color.Color = formatConditions.BorderColor()\n\t\t\tws.Range[origin, extent].FormatConditions(index).Direction = formatConditions.DirectionType()\n\n\t\telse:\n\t\t\tfillStyle = formatConditions.GraphicStyle().fillStyle\n\t\t\ttextStyle = formatConditions.GraphicStyle().textStyle\n\t\t\tborderStyle = formatConditions.GraphicStyle().borderStyle\n\t\t\t\n\t\t\tif fillStyle.backgroundColor != None:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).Interior.Color = fillStyle.BackgroundColor()\n\t\t\tif fillStyle.patternType != None:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).Interior.Pattern = fillStyle.PatternType()\n\t\t\tif fillStyle.patternColor != None:\n\t\t\t\tws.Range[origin, extent].FormatConditions(index).Interior.PatternColor = fillStyle.PatternColor()\n\t\t\tws.Range[origin, extent].FormatConditions(index).StopIfTrue = False\n\t\treturn ws\n\n\tws.Range[origin, extent].FormatConditions.Delete()\n\tif not isinstance(formatConditions, list):\n\t\tAddFormatCondition(origin, extent, ws, formatConditions)\n\t\tFormatGraphics(origin, extent, ws, formatConditions, None)\n\telse:\n\t\tfor index, value in enumerate(formatConditions):\n\t\t\tAddFormatCondition(origin, extent, ws, value)\n\t\t\tFormatGraphics(origin, extent, ws, value, index)\n\treturn ws\n\t\nif runMe:\n\tmessage = None\n\ttry:\n\t\terrorReport = None\n\t\tmessage = \"Success!\"\n\t\tif filePath == None:\n\t\t\t# run excel in live mode\n\t\t\txlApp = LiveStream()\n\t\t\twb = xlApp.ActiveWorkbook\n\t\t\tif sheetName == None:\n\t\t\t\tws = xlApp.ActiveSheet\n\t\t\telse:\n\t\t\t\tws = xlApp.Sheets(sheetName)\n\t\t\tif not isinstance(cellRange, list):\n\t\t\t\torigin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])\n\t\t\t\textent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])\n\t\t\t\tConditionFormatCells(origin, extent, ws, formatConditions)\n\t\t\telse:\n\t\t\t\tfor index, (range, format) in enumerate(zip(cellRange, formatConditions)):\n\t\t\t\t\torigin = ws.Cells(bb.xlRange(range)[1], bb.xlRange(range)[0])\n\t\t\t\t\textent = ws.Cells(bb.xlRange(range)[3], bb.xlRange(range)[2])\n\t\t\t\t\tConditionFormatCells(origin, extent, ws, format)\n\t\telse:\n\t\t\ttry:\n\t\t\t\txlApp = SetUp(Excel.ApplicationClass())\t\t\n\t\t\t\tif os.path.isfile(unicode(filePath)):\n\t\t\t\t\txlApp.Workbooks.open(unicode(filePath))\n\t\t\t\t\twb = xlApp.ActiveWorkbook\n\t\t\t\t\tws = xlApp.Sheets(sheetName)\n\t\t\t\t\tif not isinstance(cellRange, list):\n\t\t\t\t\t\torigin = ws.Cells(bb.xlRange(cellRange)[1], bb.xlRange(cellRange)[0])\n\t\t\t\t\t\textent = ws.Cells(bb.xlRange(cellRange)[3], bb.xlRange(cellRange)[2])\n\t\t\t\t\t\tConditionFormatCells(origin, extent, ws, formatConditions)\n\t\t\t\t\t\tMarshal.ReleaseComObject(extent)\n\t\t\t\t\t\tMarshal.ReleaseComObject(origin)\n\t\t\t\t\telse:\n\t\t\t\t\t\tfor index, (range, format) in enumerate(zip(cellRange, formatConditions)):\n\t\t\t\t\t\t\torigin = ws.Cells(bb.xlRange(range)[1], bb.xlRange(range)[0])\n\t\t\t\t\t\t\textent = ws.Cells(bb.xlRange(range)[3], bb.xlRange(range)[2])\n\t\t\t\t\t\t\tConditionFormatCells(origin, extent, ws, format)\n\t\t\t\t\t\t\tMarshal.ReleaseComObject(extent)\n\t\t\t\t\t\t\tMarshal.ReleaseComObject(origin)\n\t\t\t\t\tExitExcel(filePath, xlApp, wb, ws)\n\t\t\texcept:\n\t\t\t\txlApp.Quit()\n\t\t\t\tMarshal.ReleaseComObject(xlApp)\n\texcept:\n\t\t# if error accurs anywhere in the process catch it\n\t\timport traceback\n\t\terrorReport = traceback.format_exc()\n\t\tpass\nelse:\n\terrorReport = \"Run Me is set to False. Please set \\nto True if you wish to write data \\nto Excel.\"\n\n#Assign your output to the OUT variable\nif errorReport == None:\n\tOUT = message\nelse:\n\tOUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "2a18b359867c4bc685894d0dbc862187",
+      "Inputs": [
+        {
+          "Id": "126ef264660548eea814461fc6c65861",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1b4d6501cd064d8bb8658794576aa98b",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "54c486f9fffb47489a8270dd3f97f4a9",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c28078fa40874793b22716591d091399",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "03a5b3eca2d943b4b44d16cb55cf3951",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b6a3d773e1b443599d107773fd3eb963",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "8b21afda1b7747e8b27f8f2874d7ecd6",
+      "End": "126ef264660548eea814461fc6c65861",
+      "Id": "9f72b0796f3644e1b98d5d9e05da9b81"
+    },
+    {
+      "Start": "2da0985349e24743bc6d3de423a2e637",
+      "End": "1b4d6501cd064d8bb8658794576aa98b",
+      "Id": "93f7a13b3a984ed69d58d683d1752daa"
+    },
+    {
+      "Start": "43966457a1f2432abde2024ccfc89df4",
+      "End": "54c486f9fffb47489a8270dd3f97f4a9",
+      "Id": "b4aa1f1d0e044cfcbfde83d71d2d54aa"
+    },
+    {
+      "Start": "515a8d66973b491ea92b778b2f9a8fac",
+      "End": "c28078fa40874793b22716591d091399",
+      "Id": "4a99dcc6011947968fb33a7f17cd6213"
+    },
+    {
+      "Start": "bee5ce018db04499ad38c77548dec931",
+      "End": "03a5b3eca2d943b4b44d16cb55cf3951",
+      "Id": "d723b47d7dc2404a88171ce2d539a137"
+    },
+    {
+      "Start": "b6a3d773e1b443599d107773fd3eb963",
+      "End": "3afc9804622b4cbbaf2554baeadf7b19",
+      "Id": "9533ed7e8c1e48a1ad4d959db2baa437"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "eac6f56266b242869189ab7e8d034fe1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 228.077117353796,
+        "Y": 238.330991828094
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "f93950f07e8341198e8dd943c76ff86c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 219.503859072727,
+        "Y": 318.161566204585
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "37f8e56eddbb4bc29f399d076553a4e0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 301.82876357392,
+        "Y": 373.051182108439
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "33cce86e77d648a383e6cd5804d77416",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 302.976402551336,
+        "Y": 429.627952076804
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "1e26983a8ec94639aa1d859a9b02b266",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 304.124041528752,
+        "Y": 487.663383387035
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "15cbc59a4d0e4f3abb1c2ca20dacdd13",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 703.096456868977,
+        "Y": 303.657482427722
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "2a18b359867c4bc685894d0dbc862187",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 549.374146187987,
+        "Y": 303.713720475506
+      }
+    ],
+    "Annotations": [],
+    "X": -154.612129873764,
+    "Y": -336.457845405011,
+    "Zoom": 1.79400970938056
+  }
+}

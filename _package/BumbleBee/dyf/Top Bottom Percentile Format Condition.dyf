@@ -1,0 +1,384 @@
+{
+  "Uuid": "cbcacb5b-1ebe-4913-bcef-fe243224d0d1",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.Format",
+  "Description": "This node will generate a Formatting Condition based on the top/bottom ranked values. It can either be top percentile (0-100) or number of top/bottom ranked values (top 10 values for example).",
+  "Name": "Top/Bottom Percentile Format Condition",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nimport System\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\nimport bumblebee as bb\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\npercent = IN[0]\nrank = IN[1]\ntopBottom = IN[2]\ngraphicStyle = IN[3]\n\nformatCondition = bb.BBTopPercentileFormatCondition()\n\nif percent != None:\n\tformatCondition.percent = percent\nif rank != None:\n\tformatCondition.rank = rank\nif topBottom != None:\n\tformatCondition.topBottom = topBottom\nif graphicStyle != None:\n\tformatCondition.graphicStyle = graphicStyle\n\n\n#Assign your output to the OUT variable\nOUT = formatCondition",
+      "VariableInputPorts": true,
+      "Id": "ca10614175a94d55b983ec07f2ecf435",
+      "Inputs": [
+        {
+          "Id": "5a9023db867c47aba55929d8fe5d577b",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8c332ce8f3de4732b6be3aaeb4ed7d62",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7723fbb0dc534ecd976a1e2b07cc44d2",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3f5c584a73e34b57b3c5a6f32c01f353",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5c5b6826bd7342f8b912d09f578456a8",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "Percent",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "true",
+        "Description": ""
+      },
+      "Id": "8f5c181e25b2464ea213ffee10c0dfb9",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "91a15818b3934d9b8e90c19591e7ceda",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "Rank",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "191a2763b0064f6597a7afa055b3c8d8",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f5efeeed537e491bbb956fd57205254b",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "Top",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "true",
+        "Description": ""
+      },
+      "Id": "ddcbbd83a41c433d9cb993afa7478959",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f084022cd9c0422c99d0ef2f0c82f18a",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "GraphicStyle",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "2ab422244c534a78b2ad83188ace5519",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7d47e631c6b64b9ca42f371b84f3cb0a",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "FormatCondition",
+      "Id": "336eaa55773b45758f10e4405d1c3342",
+      "Inputs": [
+        {
+          "Id": "3278f18c0d6d421ebdc5ca76a0234f4b",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "5c5b6826bd7342f8b912d09f578456a8",
+      "End": "3278f18c0d6d421ebdc5ca76a0234f4b",
+      "Id": "1f7ba2a5cbfa422a83c4f7984812f44b"
+    },
+    {
+      "Start": "91a15818b3934d9b8e90c19591e7ceda",
+      "End": "5a9023db867c47aba55929d8fe5d577b",
+      "Id": "0f0ce1e59a9a4a38ad5faa18dd496681"
+    },
+    {
+      "Start": "f5efeeed537e491bbb956fd57205254b",
+      "End": "8c332ce8f3de4732b6be3aaeb4ed7d62",
+      "Id": "8044f2c230a443f294b814f7afe62350"
+    },
+    {
+      "Start": "f084022cd9c0422c99d0ef2f0c82f18a",
+      "End": "7723fbb0dc534ecd976a1e2b07cc44d2",
+      "Id": "de2cd31976b04c55a419b1e6b85e91e6"
+    },
+    {
+      "Start": "7d47e631c6b64b9ca42f371b84f3cb0a",
+      "End": "3f5c584a73e34b57b3c5a6f32c01f353",
+      "Id": "d47ebe3fa27b47dc89bd476e7665b4f9"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "ca10614175a94d55b983ec07f2ecf435",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 518.909728704989,
+        "Y": 224.558433179307
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "8f5c181e25b2464ea213ffee10c0dfb9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 159.686221937227,
+        "Y": 203.103933779701
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "191a2763b0064f6597a7afa055b3c8d8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 180.871001152438,
+        "Y": 261.362076621532
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "ddcbbd83a41c433d9cb993afa7478959",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 163.658368040079,
+        "Y": 321.60629251479
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "2ab422244c534a78b2ad83188ace5519",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 188.153269007667,
+        "Y": 381.850508408047
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "336eaa55773b45758f10e4405d1c3342",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 684.009507513709,
+        "Y": 224.288712994913
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "7e4409c500af4111a53c7ec55ac7fa01",
+        "Title": "Graphic Style",
+        "Nodes": [],
+        "Left": 420.0,
+        "Top": 333.99006158245,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "6e79c66d56da48b88bef7075681d1e99",
+        "Title": "Rank",
+        "Nodes": [],
+        "Left": 460.00177344837,
+        "Top": 280.73406732298,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "d279db99a5914831a29188ddfd9c9a64",
+        "Title": "Percent? ",
+        "Nodes": [],
+        "Left": 441.221623707201,
+        "Top": 253.49495205947,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "a626b90815ec487c8cac42992a85089f",
+        "Title": "Top?",
+        "Nodes": [],
+        "Left": 459.034375510651,
+        "Top": 305.95164577663,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "4866672a813d41d8af0f79678781db74",
+        "Title": "Top/Bottom Percentile Format Condition",
+        "Nodes": [],
+        "Left": 452.65964474101,
+        "Top": 188.0,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -110.890934802354,
+    "Y": -155.326192731692,
+    "Zoom": 1.66537098414077
+  }
+}

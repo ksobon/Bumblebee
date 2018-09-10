@@ -1,0 +1,213 @@
+{
+  "Uuid": "a186e8f0-0019-40e1-a042-6dd7d3b51bec",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.App",
+  "Description": "This node will query an Excel file and return a list of sheet names that it contains. ",
+  "Name": "Get Worksheet Names",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "filePath",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "6661d39d4eef47bcaeb83430878f4b63",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b85596ac1bf145118b60a042189e79a6",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "runIt",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": ""
+      },
+      "Id": "d66d572b01ca42b7861471fbe222a592",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9a9f5800fd60406e9ff15beaba9489ba",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "OUT",
+      "Id": "e24fc591595c452996b84d6717ff20a9",
+      "Inputs": [
+        {
+          "Id": "d2fcdce5f9f54eef8e07269a5ceb7670",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\nimport System\nfrom System import Array\nfrom System.Collections.Generic import *\n\nclr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')\nfrom Microsoft.Office.Interop import Excel\nSystem.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo(\"en-US\")\nfrom System.Runtime.InteropServices import Marshal\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nfrom os import path\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\nimport bumblebee as bb\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\nfilePath = IN[0]\nrunMe = IN[1]\n\nif filePath != None:\n\tif filePath.GetType() == System.IO.FileInfo:\n\t\tfilePath = filePath.FullName\n\ndef SetUp(xlApp):\n\t# supress updates and warning pop ups\n\txlApp.Visible = False\n\txlApp.DisplayAlerts = False\n\txlApp.ScreenUpdating = False\n\treturn xlApp\n\ndef ExitExcel(xlApp, wb):\n\t# clean up before exiting excel, if any COM object remains\n\t# unreleased then excel crashes on open following time\n\tdef CleanUp(_list):\n\t\tif isinstance(_list, list):\n\t\t\tfor i in _list:\n\t\t\t\tMarshal.ReleaseComObject(i)\n\t\telse:\n\t\t\tMarshal.ReleaseComObject(_list)\n\t\treturn None\n\t\t\n\txlApp.ActiveWorkbook.Close(False)\n\txlApp.ScreenUpdating = True\n\tCleanUp([wb,xlApp])\n\treturn None\n\ntry:\n\terrorReport = None\n\tif runMe:\n\t\tmessage = None\n\t\ttry:\n\t\t\tdataOut = []\n\t\t\txlApp = SetUp(Excel.ApplicationClass())\n\t\t\tif path.isfile(unicode(filePath)):\n\t\t\t\txlApp.Workbooks.open(unicode(filePath))\n\t\t\t\twb = xlApp.ActiveWorkbook\n\t\t\t\tfor i in range(0, xlApp.Sheets.Count, 1):\n\t\t\t\t\tdataOut.append(xlApp.Sheets(i+1).Name)\n\t\t\tExitExcel(xlApp, wb)\n\t\texcept:\n\t\t\txlApp.Quit()\n\t\t\tMarshal.ReleaseComObject(xlApp)\n\t\t\tpass\n\telse:\n\t\terrorReport = \"Set RunMe to True.\"\nexcept:\n\t\t# if error accurs anywhere in the process catch it\n\t\timport traceback\n\t\terrorReport = traceback.format_exc()\n\n#Assign your output to the OUT variable\nif errorReport == None:\n\tOUT = dataOut\nelse:\n\tOUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "a351a0b7f106473d9e5580daf6f3e2eb",
+      "Inputs": [
+        {
+          "Id": "15a33563a33c485b8ca147de4765021d",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e0ae2350062d4f56a869d707f9d54395",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "915785bf73214e3bb309de5031636110",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "b85596ac1bf145118b60a042189e79a6",
+      "End": "15a33563a33c485b8ca147de4765021d",
+      "Id": "4bdf1f53c59a4a1a84a495f8556e2ca8"
+    },
+    {
+      "Start": "9a9f5800fd60406e9ff15beaba9489ba",
+      "End": "e0ae2350062d4f56a869d707f9d54395",
+      "Id": "34b69ba7f6394d2d8ba906434b3eb9c6"
+    },
+    {
+      "Start": "915785bf73214e3bb309de5031636110",
+      "End": "d2fcdce5f9f54eef8e07269a5ceb7670",
+      "Id": "00df9b764609403eb35033240f64a33e"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "6661d39d4eef47bcaeb83430878f4b63",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 424.98486116702219,
+        "Y": 258.18825612692882
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "d66d572b01ca42b7861471fbe222a592",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 325.08604483834227,
+        "Y": 355.787307467394
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "e24fc591595c452996b84d6717ff20a9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 770.884202439065,
+        "Y": 288.836983755863
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "a351a0b7f106473d9e5580daf6f3e2eb",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 594.742348201497,
+        "Y": 290.273931162468
+      }
+    ],
+    "Annotations": [],
+    "X": -386.826188094197,
+    "Y": -243.040328993579,
+    "Zoom": 1.74331992875497
+  }
+}

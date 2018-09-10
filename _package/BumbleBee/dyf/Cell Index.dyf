@@ -1,0 +1,163 @@
+{
+  "Uuid": "25fb7e98-dd92-4eae-b44d-91b4dbc1baa5",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.App",
+  "Description": "This node will convert an excel address notation from string format (A1) to index format (1,1).",
+  "Name": "Cell Index",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nimport System\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\n\nimport bumblebee as bb\nimport string\nimport re\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\ncellAddress = IN[0]\n\ndef ProcessList(_func, _list):\n    return map( lambda x: ProcessList(_func, x) if type(x)==list else _func(x), _list )\n\nif isinstance(cellAddress, list):\n\tOUT = ProcessList(bb.CellIndex, cellAddress)\nelse:\n\tOUT = bb.CellIndex(cellAddress)",
+      "VariableInputPorts": true,
+      "Id": "96f4316a38c44419a02254a8743de591",
+      "Inputs": [
+        {
+          "Id": "2a3dc87d366d4971822c9a1f223396d7",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "91283ad4c9144156acc5423415931a52",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "Address",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "e20c00aead2649c3becc8291185ad7c5",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0843fca1a41140208997968e1f8b48c8",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "OUT",
+      "Id": "e9c026c55eb14ce4961e271c0d42c6db",
+      "Inputs": [
+        {
+          "Id": "830e7e5540074badb7281c4d3526f7c4",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "91283ad4c9144156acc5423415931a52",
+      "End": "830e7e5540074badb7281c4d3526f7c4",
+      "Id": "54e0fb13109e4d1687fdcc3f86f3407a"
+    },
+    {
+      "Start": "0843fca1a41140208997968e1f8b48c8",
+      "End": "2a3dc87d366d4971822c9a1f223396d7",
+      "Id": "f9051012c0f1433982acb05a5cce05d1"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "96f4316a38c44419a02254a8743de591",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 280.0,
+        "Y": 202.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "e20c00aead2649c3becc8291185ad7c5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 118.448020830592,
+        "Y": 206.752648211044
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "e9c026c55eb14ce4961e271c0d42c6db",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 444.592073972361,
+        "Y": 210.695976589214
+      }
+    ],
+    "Annotations": [],
+    "X": 269.005514921875,
+    "Y": -129.802883875,
+    "Zoom": 1.545620359375
+  }
+}

@@ -1,0 +1,413 @@
+{
+  "Uuid": "6cf7f3b9-69ab-40da-b41c-62068370e1b8",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.Read",
+  "Description": "This node will read an excel file. You can read an entore sheet contents, read from specific origin cell, read only specific range, or do all of the former for multiple sheets at the same time. ",
+  "Name": "Read Excel",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "filePath",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "87c78a978c52429e92e84ba93c2d4968",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5a29732e3fcb4459858c1b096c0bee75",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "runIt",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": ""
+      },
+      "Id": "e82415e03e204bb1b22ccc5af642d020",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0b79915fc9364f028a6d267c05da7781",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "sheetName",
+        "TypeName": "string",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "b3ef95fb98a24f05ac7bf0e55366c698",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d1c621f83051409991c49e3e0d522efc",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "byColumn",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": ""
+      },
+      "Id": "64b34667737e434f8b18dcb83523c699",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "cb77d0b29e4046a582be472289e3e8dc",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "origin",
+        "TypeName": "string",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "60dad4873d1b45cbb2788e90f275ada5",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "496aa1cfd971497d923b5af6afe6b41e",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "extent",
+        "TypeName": "string",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "439ab39512874c32a4b882b9bc8139ea",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "627ba487af554619a07fd69e4ccc126f",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "OUT",
+      "Id": "568cb3f9971048e486d5c3323f789392",
+      "Inputs": [
+        {
+          "Id": "f6cc3edd3cac49ab9acc5b81bfa25172",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\nimport System\nfrom System import Array\nfrom System.Collections.Generic import *\n\nclr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')\nfrom Microsoft.Office.Interop import Excel\nSystem.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo(\"en-US\")\nfrom System.Runtime.InteropServices import Marshal\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nfrom os import path\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\nimport bumblebee as bb\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\nfilePath = IN[0]\nrunMe = IN[1]\nsheetName = IN[2]\nbyColumn = IN[3]\norigin = IN[4]\nextent = IN[5]\n\nif filePath != None:\n\tif filePath.GetType() == System.IO.FileInfo:\n\t\tfilePath = filePath.FullName\n\ndef ReadData(ws, origin, extent, byColumn):\n\n\trng = ws.Range[origin, extent].Value2\n\tif not byColumn:\n\t\tdataOut = [[] for i in range(rng.GetUpperBound(0))]\n\t\tfor i in range(rng.GetLowerBound(0)-1, rng.GetUpperBound(0), 1):\n\t\t\tfor j in range(rng.GetLowerBound(1)-1, rng.GetUpperBound(1), 1):\n\t\t\t\tdataOut[i].append(rng[i,j])\n\t\treturn dataOut\n\telse:\n\t\tdataOut = [[] for i in range(rng.GetUpperBound(1))]\n\t\tfor i in range(rng.GetLowerBound(1)-1, rng.GetUpperBound(1), 1):\n\t\t\tfor j in range(rng.GetLowerBound(0)-1, rng.GetUpperBound(0), 1):\n\t\t\t\tdataOut[i].append(rng[j,i])\n\t\treturn dataOut\n\ndef GetOrigin(ws, origin):\n\tif origin != None:\n\t\torigin = ws.Cells(bb.CellIndex(origin)[1], bb.CellIndex(origin)[0])\n\telse:\n\t\torigin = ws.Cells(ws.UsedRange.Row, ws.UsedRange.Column)\n\treturn origin\n\ndef GetExtent(ws, extent):\n\tif extent != None:\n\t\textent = ws.Cells(bb.CellIndex(extent)[1], bb.CellIndex(extent)[0])\n\telse:\n\t\textent = ws.Cells(ws.UsedRange.Rows(ws.UsedRange.Rows.Count).Row, ws.UsedRange.Columns(ws.UsedRange.Columns.Count).Column)\n\treturn extent\n\ndef SetUp(xlApp):\n\t# supress updates and warning pop ups\n\txlApp.Visible = False\n\txlApp.DisplayAlerts = False\n\txlApp.ScreenUpdating = False\n\treturn xlApp\n\ndef ExitExcel(xlApp, wb, ws):\n\t# clean up before exiting excel, if any COM object remains\n\t# unreleased then excel crashes on open following time\n\tdef CleanUp(_list):\n\t\tif isinstance(_list, list):\n\t\t\tfor i in _list:\n\t\t\t\tMarshal.ReleaseComObject(i)\n\t\telse:\n\t\t\tMarshal.ReleaseComObject(_list)\n\t\treturn None\n\t\t\n\txlApp.ActiveWorkbook.Close(False)\n\txlApp.ScreenUpdating = True\n\tCleanUp([ws,wb,xlApp])\n\treturn None\n\ndef LiveStream():\n\ttry:\n\t\txlApp = Marshal.GetActiveObject(\"Excel.Application\")\n\t\txlApp.Visible = True\n\t\txlApp.DisplayAlerts = False\n\t\treturn xlApp\n\texcept:\n\t\treturn None\n\nlive = False\n\nif runMe:\n\ttry:\n\t\terrorReport = None\n\t\tmessage = None\n\t\tif filePath == None:\n\t\t\t# run excel in live mode\n\t\t\txlApp = LiveStream()\n\t\t\tlive = True\n\t\telse:\n\t\t\t# run excel from file on disk\n\t\t\txlApp = SetUp(Excel.ApplicationClass())\n\t\t\tif path.isfile(unicode(filePath)):\n\t\t\t\txlApp.Workbooks.open(unicode(filePath))\n\t\t\tlive = False\t\t\t\t\n\t\t# get workbook\n\t\twb = xlApp.ActiveWorkbook\n\t\t# get worksheet\n\t\tif sheetName == None:\n\t\t\tws = xlApp.ActiveSheet\n\t\t\tdataOut = ReadData(ws, GetOrigin(ws, origin), GetExtent(ws, extent), byColumn)\n\t\t\tif not live:\n\t\t\t\tExitExcel(xlApp, wb, ws)\n\t\telif not isinstance(sheetName, list):\n\t\t\tws = xlApp.Sheets(sheetName)\n\t\t\tdataOut = ReadData(ws, GetOrigin(ws, origin), GetExtent(ws, extent), byColumn)\n\t\t\tif not live:\n\t\t\t\tExitExcel(xlApp, wb, ws)\n\t\telse:\n\t\t\t# process multiple sheets\n\t\t\tdataOut = []\n\t\t\tif isinstance(origin, list):\n\t\t\t\tif isinstance(extent, list):\n\t\t\t\t\tfor index, (name, oValue, eValue) in enumerate(zip(sheetName, origin, extent)):\n\t\t\t\t\t\tws = xlApp.Sheets(str(name))\n\t\t\t\t\t\tdataOut.append(ReadData(ws, GetOrigin(ws, oValue), GetExtent(ws, eValue), byColumn))\n\t\t\t\telse:\n\t\t\t\t\tfor index, (name, oValue) in enumerate(zip(sheetName, origin)):\n\t\t\t\t\t\tws = xlApp.Sheets(str(name))\n\t\t\t\t\t\tdataOut.append(ReadData(ws, GetOrigin(ws, oValue), GetExtent(ws, extent), byColumn))\n\t\t\telse:\n\t\t\t\tif isinstance(extent, list):\n\t\t\t\t\tfor index, (name, eValue) in enumerate(zip(sheetName, extent)):\n\t\t\t\t\t\tws = xlApp.Sheets(str(name))\n\t\t\t\t\t\tdataOut.append(ReadData(ws, GetOrigin(ws, origin), GetExtent(ws, eValue), byColumn))\n\t\t\t\telse:\n\t\t\t\t\tfor index, name in enumerate(sheetName):\n\t\t\t\t\t\tws = xlApp.Sheets(str(name))\n\t\t\t\t\t\tdataOut.append(ReadData(ws, GetOrigin(ws, origin), GetExtent(ws, extent), byColumn))\n\t\t\tif not live:\n\t\t\t\tExitExcel(xlApp, wb, ws)\t\n\texcept:\n\t\txlApp.Quit()\n\t\tMarshal.ReleaseComObject(xlApp)\n\t\t# if error accurs anywhere in the process catch it\n\t\timport traceback\n\t\terrorReport = traceback.format_exc()\n\t\tpass\nelse:\n\terrorReport = \"Set RunMe to True.\"\n\n#Assign your output to the OUT variable\nif errorReport == None:\n\tOUT = dataOut\nelse:\n\tOUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "7a06035275764e6cbbd541b897b31cc3",
+      "Inputs": [
+        {
+          "Id": "7bb349353a5f483fb281ce2050c27bb8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a96d007c8e8f4524985f0b9489eca018",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "787fb5aa50a2424ca4a136d98c3d0082",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4ea69b05605b4ed3a374c7c77467ade1",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "da40f461536c4d2b8a88b2543be29d6c",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e599497922f6411798b793f1db764d3e",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cf8f1771e87c48ecaf2bd1165fcc6132",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "5a29732e3fcb4459858c1b096c0bee75",
+      "End": "7bb349353a5f483fb281ce2050c27bb8",
+      "Id": "184f4e9f91d44a4fa4da1324677dd2a1"
+    },
+    {
+      "Start": "0b79915fc9364f028a6d267c05da7781",
+      "End": "a96d007c8e8f4524985f0b9489eca018",
+      "Id": "1d7d96f87d244ecaa0b41c65bd34d55d"
+    },
+    {
+      "Start": "d1c621f83051409991c49e3e0d522efc",
+      "End": "787fb5aa50a2424ca4a136d98c3d0082",
+      "Id": "8a4fcda621e34c58839aaad3fd6ba19a"
+    },
+    {
+      "Start": "cb77d0b29e4046a582be472289e3e8dc",
+      "End": "4ea69b05605b4ed3a374c7c77467ade1",
+      "Id": "cc379199fd374b1cb94423ec5be5b0df"
+    },
+    {
+      "Start": "496aa1cfd971497d923b5af6afe6b41e",
+      "End": "da40f461536c4d2b8a88b2543be29d6c",
+      "Id": "74d46f9f940248ed932cc8b67222ce68"
+    },
+    {
+      "Start": "627ba487af554619a07fd69e4ccc126f",
+      "End": "e599497922f6411798b793f1db764d3e",
+      "Id": "10214bde5ef14bbab0a7aa9977550cdd"
+    },
+    {
+      "Start": "cf8f1771e87c48ecaf2bd1165fcc6132",
+      "End": "f6cc3edd3cac49ab9acc5b81bfa25172",
+      "Id": "f56c4519437f4e98852c9887bd96d377"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "87c78a978c52429e92e84ba93c2d4968",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 188.520680159148,
+        "Y": 120.339840401757
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "e82415e03e204bb1b22ccc5af642d020",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 221.520680159148,
+        "Y": 187.018090833896
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "b3ef95fb98a24f05ac7bf0e55366c698",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 155.520680159148,
+        "Y": 251.269434059762
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "64b34667737e434f8b18dcb83523c699",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 196.520680159148,
+        "Y": 307.914683939052
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "60dad4873d1b45cbb2788e90f275ada5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 172.520680159148,
+        "Y": 367.452611350471
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "439ab39512874c32a4b882b9bc8139ea",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 172.520680159148,
+        "Y": 430.174080997827
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "568cb3f9971048e486d5c3323f789392",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 667.471052204981,
+        "Y": 203.520470112953
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "7a06035275764e6cbbd541b897b31cc3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 506.123977547472,
+        "Y": 204.078363894991
+      }
+    ],
+    "Annotations": [],
+    "X": -76.4596072498584,
+    "Y": -55.5345570492093,
+    "Zoom": 1.44324244583205
+  }
+}

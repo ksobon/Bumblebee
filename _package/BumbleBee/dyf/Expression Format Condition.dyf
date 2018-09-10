@@ -1,0 +1,213 @@
+{
+  "Uuid": "5220ca12-2319-4a94-acca-b0945790e3dc",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.Format",
+  "Description": "This node will generate an expression based formatting condition that can be used with Conditionally Format Excel Node.",
+  "Name": "Expression Format Condition",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nimport System\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\nimport bumblebee as bb\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\nexpression = IN[0]\ngraphicStyle = IN[1]\n\nformatCondition = bb.BBExpressionFormatCondition()\n\nif expression != None:\n\tformatCondition.expression = expression\nif graphicStyle != None:\n\tformatCondition.graphicStyle = graphicStyle\n\n#Assign your output to the OUT variable\nOUT = formatCondition",
+      "VariableInputPorts": true,
+      "Id": "d59662e1456945edb9a6a0a96624b0ee",
+      "Inputs": [
+        {
+          "Id": "2a6368e9f13e46769addec96c7068360",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ee9fbf4fa4af4a90b6119c7967f44a74",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "40a42a047e40418793870078a0f643c9",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "Expression",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "896571a7475c4a3ea57963d82793948d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4b295479c3184080a3e4ab0dddf7a53e",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "GraphicStyle",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "cbb68d248cba45339a95b0f3f5a6582a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "941f6339791c4ee1ac5fed6d5186e63d",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "FormatCondition",
+      "Id": "ecd6409eeee04b5fa7d3f3e8a6dec686",
+      "Inputs": [
+        {
+          "Id": "694138e7a77b471d866dd7e5c3507eb9",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "40a42a047e40418793870078a0f643c9",
+      "End": "694138e7a77b471d866dd7e5c3507eb9",
+      "Id": "21a8d35bbd4245a3bcb5bbfc5c909bc9"
+    },
+    {
+      "Start": "4b295479c3184080a3e4ab0dddf7a53e",
+      "End": "2a6368e9f13e46769addec96c7068360",
+      "Id": "eecf8398279f4f5aa80e1c36a868ce63"
+    },
+    {
+      "Start": "941f6339791c4ee1ac5fed6d5186e63d",
+      "End": "ee9fbf4fa4af4a90b6119c7967f44a74",
+      "Id": "951cb90c809d4de392acfbcb27d847d0"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "d59662e1456945edb9a6a0a96624b0ee",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 467.40354313102,
+        "Y": 221.954725239463
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "896571a7475c4a3ea57963d82793948d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 301.559917257494,
+        "Y": 207.534481850713
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "cbb68d248cba45339a95b0f3f5a6582a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 288.88687708647,
+        "Y": 268.766949667621
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "ecd6409eeee04b5fa7d3f3e8a6dec686",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 630.822242259576,
+        "Y": 223.656509720649
+      }
+    ],
+    "Annotations": [],
+    "X": -390.567685315082,
+    "Y": -201.1579572604,
+    "Zoom": 2.05668026833428
+  }
+}

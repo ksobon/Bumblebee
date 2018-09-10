@@ -1,0 +1,563 @@
+{
+  "Uuid": "5732b73f-72c2-4872-8e1a-e74b723547b1",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.Charts",
+  "Description": "This node will generate a new Pie Chart in your currently running session of Excel.",
+  "Name": "Pie Chart",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\nimport System\nfrom System import Array\nfrom System.Collections.Generic import *\n\nclr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')\nfrom Microsoft.Office.Interop import Excel\nSystem.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo(\"en-US\")\nfrom System.Runtime.InteropServices import Marshal\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\n\nimport System\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\n\nimport bumblebee as bb\nimport string\nimport re\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\nrunMe = IN[0]\nsheetName = IN[1]\nsize = IN[2]\ntitle = IN[3]\ndataRange = IN[4]\nchartType = IN[5]\nlegendStyle = IN[6]\nchartStyle = IN[7]\ngraphStyle = IN[8]\n\ndef LiveStream():\n\ttry:\n\t\txlApp = Marshal.GetActiveObject(\"Excel.Application\")\n\t\txlApp.Visible = True\n\t\txlApp.DisplayAlerts = False\n\t\txlApp.ScreenUpdating = False\n\t\treturn xlApp\n\texcept:\n\t\treturn None\n\ndef GetWidthHeight(origin, extent, ws):\n\tleft = origin.Left\n\ttop = origin.Top\n\twidth = ws.Range[origin, extent].Width\n\theight = ws.Range[origin, extent].Height\n\treturn [left, top, width, height]\n\ndef FormatBorder(border, bStyle):\n\tif bStyle.lineType != None:\n\t\tborder.LineStyle = bStyle.LineType()\n\tif bStyle.weight != None:\n\t\tborder.Weight = bStyle.Weight()\n\tif bStyle.color != None:\n\t\tborder.Color = bStyle.Color()\n\treturn None\n\ndef FormatText(text, tStyle):\n\tif tStyle.name != None:\n\t\ttext.Name = tStyle.Name()\n\tif tStyle.size != None:\n\t\ttext.Size = tStyle.Size()\n\tif tStyle.color != None:\n\t\ttext.Color = tStyle.Color()\n\tif tStyle.bold != None:\n\t\ttext.Bold = tStyle.Bold()\n\tif tStyle.italic != None:\n\t\ttext.Italic = tStyle.Italic()\n\tif tStyle.underline != None:\n\t\ttext.Underline = tStyle.Underline()\n\tif tStyle.strikethrough != None:\n\t\ttext.Strikethrough = tStyle.Strikethrough()\n\treturn None\n\ndef FormatFill(fill, fStyle):\n\tif fStyle.patternType != None:\n\t\tfill.Pattern = fStyle.PatternType()\t\n\tif fStyle.patternColor != None:\n\t\tfill.PatternColor = fStyle.PatternColor()\t\n\tif fStyle.backgroundColor != None:\n\t\tfill.Color = fStyle.BackgroundColor()\n\treturn None\n\nif runMe:\n\tmessage = None\n\ttry:\n\t\txlApp = LiveStream()\n\t\terrorReport = None\n\t\twb = xlApp.ActiveWorkbook\n\t\tws = xlApp.Sheets(sheetName)\n\t\t# get chart size and location from range\n\t\torigin = ws.Cells(bb.xlRange(size)[1], bb.xlRange(size)[0])\n\t\textent = ws.Cells(bb.xlRange(size)[3], bb.xlRange(size)[2])\n\t\tleft = GetWidthHeight(origin, extent, ws)[0]\n\t\ttop = GetWidthHeight(origin, extent, ws)[1]\n\t\twidth = GetWidthHeight(origin, extent, ws)[2]\n\t\theight = GetWidthHeight(origin, extent, ws)[3]\n\t\t# get existing chart with same name or create new\n\t\tif ws.ChartObjects().Count > 0:\n\t\t\tfor i in range(1, ws.ChartObjects().Count + 1, 1):\n\t\t\t\tif ws.ChartObjects().Item(i).Name == title:\n\t\t\t\t\tchartObject = ws.ChartObjects().Item(i)\n\t\telse:\n\t\t\tchartObjects = ws.ChartObjects()\n\t\t\tchartObject = chartObjects.Add(left, top, width, height)\n\t\t\tif title != None:\n\t\t\t\tchartObject.Name = title\n\t\t\telse:\n\t\t\t\tchartObject.Name = \"Untitled\"\n\t\t# update chart size\n\t\tif chartObject.Left != left:\n\t\t\tchartObject.Left = left\n\t\tif chartObject.Top != top:\n\t\t\tchartObject.Top = top\n\t\tif chartObject.Width != width:\n\t\t\tchartObject.Width = width\n\t\tif chartObject.Height != height:\n\t\t\tchartObject.Height = height\n\t\t# get chart object\n\t\txlChart = chartObject.Chart\n\t\t# set chart type\n\t\txlChart.ChartType = chartType\n\t\t# set chart data source range\n\t\tdataOrigin = ws.Cells(bb.xlRange(dataRange)[1], bb.xlRange(dataRange)[0])\n\t\tdataExtent = ws.Cells(bb.xlRange(dataRange)[3], bb.xlRange(dataRange)[2])\n\t\txlChart.SetSourceData(ws.Range[dataOrigin, dataExtent])\n\t\t# set chart title\n\t\tif title != None:\n\t\t\txlChart.HasTitle = True\n\t\t\txlChart.ChartTitle.Text = title\n\t\telse:\n\t\t\txlChart.HasTitle = False\n\n\t\t#########################\n\t\t### Legend Formatting ###\n\t\t#########################\n\n\t\tif xlChart.HasLegend:\n\t\t\txlChart.Legend.Clear()\n\t\t# set text style for legend\n\t\tif legendStyle != None:\n\t\t\txlChart.HasLegend = True\n\t\t\t# set legend box position\n\t\t\tif legendStyle.position != None:\n\t\t\t\txlChart.Legend.Position = legendStyle.Position()\n\t\t\t# set legend text style\n\t\t\tif legendStyle.textStyle != None:\n\t\t\t\tFormatText(xlChart.Legend.Font, legendStyle.textStyle)\n\t\t\t# set border style for legend\n\t\t\tif legendStyle.borderStyle != None:\n\t\t\t\tFormatBorder(xlChart.Legend.Border, legendStyle.borderStyle)\n\t\t\t#set fill style for legend\n\t\t\tif legendStyle.fillStyle != None:\n\t\t\t\tFormatFill(xlChart.Legend.Interior, legendStyle.fillStyle)\n\t\t\t# change default Legend labels to range\n\t\t\tif legendStyle.labels != None:\n\t\t\t\tlabels = legendStyle.Labels()\n\t\t\t\tchartSeries = xlChart.Seriescollection(1)\n\t\t\t\tcatOrigin = ws.Cells(labels[1], labels[0])\n\t\t\t\tcatExtent = ws.Cells(labels[3], labels[2])\n\t\t\t\tchartSeries.XValues = ws.Range[catOrigin, catExtent]\n\n\t\t########################\n\t\t### Chart Formatting ###\n\t\t########################\n\n\t\tif chartStyle != None:\n\t\t\tif chartStyle.borderStyle != None:\n\t\t\t\txlChart.ChartArea.Format.Line.Visible = True\n\t\t\t\tFormatBorder(xlChart.ChartArea.Border, chartStyle.borderStyle)\n\t\t\telse:\n\t\t\t\txlChart.ChartArea.Format.Line.Visible = False\n\t\t\tif chartStyle.fillStyle != None:\n\t\t\t\txlChart.ChartArea.Fill.Visible = True\n\t\t\t\txlChart.PlotArea.Fill.Visible = True\n\t\t\t\tFormatFill(xlChart.ChartArea.Interior, chartStyle.fillStyle)\n\t\t\telse:\n\t\t\t\txlChart.ChartArea.Fill.Visible = False\n\t\t\t\txlChart.PlotArea.Fill.Visible = False\n\t\t\tif chartStyle.roundCorners != None:\n\t\t\t\txlChart.ChartArea.RoundedCorners = chartStyle.RoundCorners()\n\n\t\t########################\n\t\t### Graph Formatting ###\n\t\t########################\n\n\t\txlChart.SeriesCollection(1).ClearFormats()\n\t\t# set graph style\n\t\tif graphStyle != None:\n\t\t\t# set graph fill style\n\t\t\tif graphStyle.fillStyle != None:\n\t\t\t\tcount = xlChart.SeriesCollection(1).Points().Count\n\t\t\t\tfor i in range(1, count + 1, 1):\n\t\t\t\t\tFormatFill(xlChart.SeriesCollection(1).Points(i).Interior, graphStyle.fillStyle)\n\t\t\t# set graph border style\n\t\t\tif graphStyle.borderStyle != None:\n\t\t\t\tcount = xlChart.SeriesCollection(1).Points().Count\n\t\t\t\tfor i in range(1, count + 1, 1):\n\t\t\t\t\tFormatBorder(xlChart.SeriesCollection(1).Points(i).Border, graphStyle.borderStyle)\n\n\t\t\t########################\n\t\t\t### Label Formatting ###\n\t\t\t########################\n\n\t\t\t# set label style\n\t\t\tif graphStyle.labelStyle != None:\n\t\t\t\tif xlChart.SeriesCollection(1).HasDataLabels == True:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().Delete()\n\t\t\t\t\txlChart.SeriesCollection(1).HasDataLabels = True\n\t\t\t\telse:\n\t\t\t\t\txlChart.SeriesCollection(1).HasDataLabels = True\n\t\t\t\tgls = graphStyle.labelStyle\n\t\t\t\tif gls.percentage != None:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().ShowPercentage = gls.Percentage()\n\t\t\t\tif gls.seriesName != None:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().ShowSeriesName = gls.SeriesName()\n\t\t\t\tif gls.value != None:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().ShowValue = gls.Value()\n\t\t\t\tif gls.legendKey != None:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().ShowLegendKey = gls.LegendKey()\n\t\t\t\tif gls.separator != None:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().Separator = gls.Separator()\n\t\t\t\tif gls.labelPosition != None:\n\t\t\t\t\txlChart.SeriesCollection(1).DataLabels().Position = gls.LabelPosition()\n\t\t\t\tif gls.leaderLines != None:\n\t\t\t\t\txlChart.SeriesCollection(1).HasLeaderLines = gls.LeaderLines()\n\t\t\t\t# set label fill settings\n\t\t\t\tif gls.fillStyle != None:\n\t\t\t\t\tFormatFill(xlChart.SeriesCollection(1).DataLabels().Interior, gls.fillStyle)\n\t\t\t\t# set label text style\n\t\t\t\tif gls.textStyle != None:\n\t\t\t\t\tFormatText(xlChart.SeriesCollection(1).DataLabels().Font, gls.textStyle)\n\t\t\t\t# set label border style\n\t\t\t\tif gls.borderStyle != None:\n\t\t\t\t\tFormatBorder(xlChart.SeriesCollection(1).DataLabels().Border, gls.borderStyle)\n\t\t\tif graphStyle.explosion != None:\n\t\t\t\txlChart.SeriesCollection(1).Explosion = graphStyle.Explosion()\n\t\txlApp.ScreenUpdating = True\n\texcept:\n\t\t# if error accurs anywhere in the process catch it\n\t\timport traceback\n\t\terrorReport = traceback.format_exc()\nelse:\n\terrorReport = \"RunMe is set to False. Please set RunMe to True to create/update chart.\"\n\nif errorReport == None:\n\tOUT = \"Success!\"\nelse:\n\tOUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "e3c65ce8777d46e58253f2f578f1ade4",
+      "Inputs": [
+        {
+          "Id": "994f4667664f41738738317dea3b04d6",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "785e8510cbf84b389679436df4d0f5cf",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0267ba7365b2480ea4b49becf1d47a45",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b138e6441a954b26872f29eb47ffe709",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c3b68563c35e46d2819d4fcd758236c5",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "91dbdd9a809946c888f2f59ad3de7637",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "de0d87fa116c4a73aba07f039284fb9e",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ab0d53e77d5d453eadc5c6e40ab5aa35",
+          "Name": "IN[7]",
+          "Description": "Input #7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d4e3ebc5dc643ae960504b6da6144ad",
+          "Name": "IN[8]",
+          "Description": "Input #8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "81f65867168a417e94a600306f00c3c3",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "RunIt",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": ""
+      },
+      "Id": "0656805590da45b4a742d5029693db4d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "84b3b7379a1c419fb2c99b02e09f7930",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "SheetName",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "2e6a0b32f88d4e699204149bdb45124e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c3dd89f5425d4716bf64dfa12ad031eb",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "SizeRange",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "4c393feb64a1421fb13f92f1d8c0a64f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c53be84ff09d41b3b8a7473b9b3aa364",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "Title",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "08d89d319c0f4375948e085ebcfe3704",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "db71989c10224bcdb5390a87ef7dd928",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "DataRange",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "994678ed239749e79f9ee5d72a574310",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "00fa0df7d2364f7691f64d3f86b2b699",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "PieChartType",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": ""
+      },
+      "Id": "2d08ca876aa74afebb7971d151a3fd24",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "242edb5337a34c9ab5324700b5484c68",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "LegendStyle",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "b1efc65da51a483c93c37d7172d17de0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "36dd182fc4be4086972998985654cc9d",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "ChartStyle",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "d16c5e88b92248e1a2a4ff51eb96b3d2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4a2276a9100a41fe85d007fa2dc96230",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "GraphStyle",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": ""
+      },
+      "Id": "e8fc297eaeaf463f9bd96ee7109eec41",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7f9a4013106548e0bbd64359a5918e40",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "OUT",
+      "Id": "b47968e82b914d0fb31da2c0d5918571",
+      "Inputs": [
+        {
+          "Id": "29bdbc3db5f647dd9cc72261106085e5",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "81f65867168a417e94a600306f00c3c3",
+      "End": "29bdbc3db5f647dd9cc72261106085e5",
+      "Id": "884361b3b19e4a17bc04fc561839639d"
+    },
+    {
+      "Start": "84b3b7379a1c419fb2c99b02e09f7930",
+      "End": "994f4667664f41738738317dea3b04d6",
+      "Id": "3242d5b6a93f4df9a75866a2c6b120b7"
+    },
+    {
+      "Start": "c3dd89f5425d4716bf64dfa12ad031eb",
+      "End": "785e8510cbf84b389679436df4d0f5cf",
+      "Id": "b0b6bee7dc9b415aa1780fa50211fc2d"
+    },
+    {
+      "Start": "c53be84ff09d41b3b8a7473b9b3aa364",
+      "End": "0267ba7365b2480ea4b49becf1d47a45",
+      "Id": "d92b46de12634316aad5ce6b261b26d9"
+    },
+    {
+      "Start": "db71989c10224bcdb5390a87ef7dd928",
+      "End": "b138e6441a954b26872f29eb47ffe709",
+      "Id": "0e3624b1675c4e4f91a4929d9a8e7d65"
+    },
+    {
+      "Start": "00fa0df7d2364f7691f64d3f86b2b699",
+      "End": "c3b68563c35e46d2819d4fcd758236c5",
+      "Id": "8ff78e5f3cdc46069368fe222cb0194b"
+    },
+    {
+      "Start": "242edb5337a34c9ab5324700b5484c68",
+      "End": "91dbdd9a809946c888f2f59ad3de7637",
+      "Id": "653305dbf2e943d18d2bc7aaffab7b39"
+    },
+    {
+      "Start": "36dd182fc4be4086972998985654cc9d",
+      "End": "de0d87fa116c4a73aba07f039284fb9e",
+      "Id": "47a1adf7ffb943afae00a25bf06d8563"
+    },
+    {
+      "Start": "4a2276a9100a41fe85d007fa2dc96230",
+      "End": "ab0d53e77d5d453eadc5c6e40ab5aa35",
+      "Id": "536ee76e6f18404b995c477e455e8eda"
+    },
+    {
+      "Start": "7f9a4013106548e0bbd64359a5918e40",
+      "End": "9d4e3ebc5dc643ae960504b6da6144ad",
+      "Id": "b2e1277b2129464bb8131d288281703e"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "e3c65ce8777d46e58253f2f578f1ade4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 686.686826417944,
+        "Y": 284.000000000001
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "0656805590da45b4a742d5029693db4d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 319.007033947776,
+        "Y": 183.525115302527
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "2e6a0b32f88d4e699204149bdb45124e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 317.623272231935,
+        "Y": 239.3290842796
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "4c393feb64a1421fb13f92f1d8c0a64f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 318.652647809518,
+        "Y": 294.74287041809
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "08d89d319c0f4375948e085ebcfe3704",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 318.000031307896,
+        "Y": 349.035328503778
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "994678ed239749e79f9ee5d72a574310",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 317.956640258713,
+        "Y": 405.018781122089
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "2d08ca876aa74afebb7971d151a3fd24",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 318.003538987988,
+        "Y": 461.455519332667
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "b1efc65da51a483c93c37d7172d17de0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 318.112925036217,
+        "Y": 519.346913204397
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "d16c5e88b92248e1a2a4ff51eb96b3d2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 319.783986971568,
+        "Y": 574.114955301884
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "e8fc297eaeaf463f9bd96ee7109eec41",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 321.455048906919,
+        "Y": 630.965231915534
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "b47968e82b914d0fb31da2c0d5918571",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 885.459520121991,
+        "Y": 282.718382515757
+      }
+    ],
+    "Annotations": [],
+    "X": -288.672750288863,
+    "Y": -82.326915265585,
+    "Zoom": 1.22704736140834
+  }
+}

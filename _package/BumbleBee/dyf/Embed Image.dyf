@@ -1,0 +1,313 @@
+{
+  "Uuid": "dc233281-eef1-4a51-902f-8c0c91ae87b2",
+  "IsCustomNode": true,
+  "Category": "archilab_Bumblebee.Write",
+  "Description": "This node will embed an image into an Excel document.",
+  "Name": "Embed Image",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Copyright(c) 2016, David Mans, Konrad Sobon\n# @arch_laboratory, http://archi-lab.net, http://neoarchaic.net\n\nimport clr\nimport sys\nimport System\nfrom System import Array\nfrom System.Collections.Generic import *\n\nclr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')\nfrom Microsoft.Office.Interop import Excel\nSystem.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo(\"en-US\")\nfrom System.Runtime.InteropServices import Marshal\n\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\nsys.path.append(pyt_path)\nfrom os import path\n\nassemblies = System.AppDomain.CurrentDomain.GetAssemblies()\npath1 = [a.Location for a in assemblies if 'bumblebee,' in a.FullName][0]\npath2 = System.IO.Path.GetDirectoryName(path1).rsplit('\\\\',1)[0]\nbb_path = '%s\\\\extra\\\\' %path2\nsys.path.append(bb_path)\nimport bumblebee as bb\n\n#The inputs to this node will be stored as a list in the IN variable.\ndataEnteringNode = IN\n\nfilePath = IN[0]\nrunMe = IN[1]\ndata = IN[2]\nstyles = IN[3]\n\nif filePath != None:\n\tif filePath.GetType() == System.IO.FileInfo:\n\t\tfilePath = filePath.FullName\n\ndef ProcessParallelLists(_func, *lists):\n\treturn map( lambda *xs: ProcessParallelLists(_func, *xs) if all(type(x) is list for x in xs) else _func(*xs), *lists )\n\ndef EmbedImage(ws, data, style):\n\tdef EmbedImage2(origin, path, name, ws = ws, width = style.width, height = style.height, link = styles.linkToFile, embed = styles.saveWithDoc):\n\t\timg = None\n\t\ttry:\n\t\t\timg = ws.Shapes(name)\n\t\texcept:\n\t\t\tpass\n\t\tif img == None:\n\t\t\timg = ws.Shapes.AddPicture(path, link, embed, 100, 100, width, height)\n\t\t\timg.Name = name\n\t\t\timg.Left = ws.Cells[bb.CellIndex(origin)[1], bb.CellIndex(origin)[0]].Left\n\t\t\timg.Top = ws.Cells[bb.CellIndex(origin)[1], bb.CellIndex(origin)[0]].Top\n\t\t\timg.Placement = 1\n\t\telse:\n\t\t\timg.Left = ws.Cells[bb.CellIndex(origin)[1], bb.CellIndex(origin)[0]].Left\n\t\t\timg.Top = ws.Cells[bb.CellIndex(origin)[1], bb.CellIndex(origin)[0]].Top\n\t\t\timg.Placement = 1\n\t\t\n\t\treturn ws\n\tif isinstance(data.data, list):\n\t\tProcessParallelLists(EmbedImage2, data.origin, data.data, style.name)\n\telse:\n\t\tEmbedImage2(data.origin, data.data, style.name)\n\ndef SetUp(xlApp):\n\t# supress updates and warning pop ups\n\txlApp.Visible = False\n\txlApp.DisplayAlerts = False\n\txlApp.ScreenUpdating = False\n\treturn xlApp\n\ndef ExitExcel(filePath, xlApp, wb, ws):\n\tdef CleanUp(_list):\n\t\tif isinstance(_list, list):\n\t\t\tfor i in _list:\n\t\t\t\tMarshal.ReleaseComObject(i)\n\t\telse:\n\t\t\tMarshal.ReleaseComObject(_list)\n\t\treturn None\n\t\n\twb.SaveAs(unicode(filePath))\n\txlApp.ActiveWorkbook.Close(False)\n\txlApp.ScreenUpdating = True\n\tCleanUp([ws,wb,xlApp])\n\treturn None\n\ndef LiveStream():\n\ttry:\n\t\txlApp = Marshal.GetActiveObject(\"Excel.Application\")\n\t\txlApp.Visible = True\n\t\txlApp.DisplayAlerts = False\n\t\treturn xlApp\n\texcept:\n\t\treturn None\n\nif runMe:\n\ttry:\n\t\terrorReport = None\n\t\tif filePath == None:\n\t\t\t# run excel in a live mode\n\t\t\txlApp = LiveStream()\n\t\t\t# if excel is running and data is being written to single sheet\n\t\t\tif not isinstance(data, list):\n\t\t\t\twb = xlApp.ActiveWorkbook\n\t\t\t\ttry:\n\t\t\t\t\tif data.sheetName == None:\n\t\t\t\t\t\tws = xlApp.ActiveSheet\n\t\t\t\t\telse:\n\t\t\t\t\t\tws = xlApp.Sheets(data.sheetName)\n\t\t\t\texcept:\n\t\t\t\t\tpass\n\t\t\t\tEmbedImage(ws, data, styles)\n\t\t\t# if excel is running and data is being written to multiple sheets\n\t\t\telse:\n\t\t\t\twb = xlApp.ActiveWorkbook\n\t\t\t\tfor i in data:\n\t\t\t\t\tws = xlApp.Sheets(i.SheetName())\n\t\t\t\t\tEmbedImage(ws , i, styles)\n\t\telse:\n\t\t\ttry:\n\t\t\t\txlApp = SetUp(Excel.ApplicationClass())\n\t\t\t\t# if excel is closed and data is being written to single sheet\n\t\t\t\tif not isinstance(data, list):\n\t\t\t\t\txlApp.Workbooks.open(unicode(filePath))\n\t\t\t\t\twb = xlApp.ActiveWorkbook\n\t\t\t\t\tws = xlApp.Sheets(styles.SheetName())\n\t\t\t\t\tEmbedImage(ws, data, styles)\n\t\t\t\t\tExitExcel(filePath, xlApp, wb, ws)\n\t\t\t\t# if excel is closed and data is being written to multiple sheets\n\t\t\t\telse:\n\t\t\t\t\txlApp.Workbooks.open(unicode(filePath))\n\t\t\t\t\twb = xlApp.ActiveWorkbook\n\t\t\t\t\tfor i in data:\n\t\t\t\t\t\tws = xlApp.Sheets(i.SheetName())\n\t\t\t\t\t\tEmbedImage(ws , i, styles)\n\t\t\t\t\tExitExcel(filePath, xlApp, wb, ws)\n\t\t\texcept:\n\t\t\t\txlApp.Quit()\n\t\t\t\tMarshal.ReleaseComObject(xlApp)\n\texcept:\n\t\t\t# if error accurs anywhere in the process catch it\n\t\t\timport traceback\n\t\t\terrorReport = traceback.format_exc()\nelse:\n\terrorReport = \"Run Me is set to False. Please set \\nto True if you wish to write data \\nto Excel.\"\n\nif errorReport == None:\n\tOUT = \"Success!\"\nelse:\n\tOUT = errorReport",
+      "VariableInputPorts": true,
+      "Id": "a311b965410a4aab87bcedbf970fdc3c",
+      "Inputs": [
+        {
+          "Id": "000173a68d8f45748038a6f67b6f0267",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ac42eafb6709478ba6e7219a615b4102",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eed034c8f309473fba20ac7942a52a62",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2506d55d34bc468d842467b6d7ca72b9",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "494b91d057684876a4ad4b50c59dde8e",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "filePath",
+        "TypeName": "string",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": "FilePath to Excel file on drive.\nLeave empty to access Excel in \"live mode\"."
+      },
+      "Id": "7601721b98cd4cf8a4bab768d5b93ced",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b9db838e45664fc880c5a534db54d908",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "RunIt",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": "Set to \"true\" to execute this node."
+      },
+      "Id": "30d5cb3233934a21a22fa18e5c433c9a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f2ba9141753141a6b5b821e1e66fb32d",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "BBData",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": "BBData node must have a list of FilePaths as input to Data.\nBBData node must have a list of Origin cells as input to Origin."
+      },
+      "Id": "67eaeb8b201e44079aaed250382be705",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "75648a2117f04392b423f90cf2a6c370",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "imageStyle",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": "ImageStyle for the embedded images.\nImageStyle node must have matching list for Name input (Origin, Data)."
+      },
+      "Id": "d2532b6d67ab48cbbac854df5249d614",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a45378b57feb4ca7ab5b95d34565b5cf",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "OUT",
+      "Id": "267ada2c713c4438af700dda261d1888",
+      "Inputs": [
+        {
+          "Id": "58e241347d904f64a4374d667a34639b",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "494b91d057684876a4ad4b50c59dde8e",
+      "End": "58e241347d904f64a4374d667a34639b",
+      "Id": "b6664b386cd947c8be97c693efbfe216"
+    },
+    {
+      "Start": "b9db838e45664fc880c5a534db54d908",
+      "End": "000173a68d8f45748038a6f67b6f0267",
+      "Id": "e7bbb6cb09314ffbbaa9e12066918c0a"
+    },
+    {
+      "Start": "f2ba9141753141a6b5b821e1e66fb32d",
+      "End": "ac42eafb6709478ba6e7219a615b4102",
+      "Id": "4841c60d28d446709ac6c794b19dcf28"
+    },
+    {
+      "Start": "75648a2117f04392b423f90cf2a6c370",
+      "End": "eed034c8f309473fba20ac7942a52a62",
+      "Id": "914cc501b04f45599b5d7d8ee5a44687"
+    },
+    {
+      "Start": "a45378b57feb4ca7ab5b95d34565b5cf",
+      "End": "2506d55d34bc468d842467b6d7ca72b9",
+      "Id": "4b7435f7edc34d0fa9561fb034fbaac3"
+    }
+  ],
+  "Dependencies": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "a311b965410a4aab87bcedbf970fdc3c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 830.858488377644,
+        "Y": 350.056450443621
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "7601721b98cd4cf8a4bab768d5b93ced",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 356.044646696921,
+        "Y": 263.754213662085
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "30d5cb3233934a21a22fa18e5c433c9a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 418.613187044111,
+        "Y": 356.400224140529
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "67eaeb8b201e44079aaed250382be705",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 179.397445791681,
+        "Y": 424.433425460585
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Input",
+        "Id": "d2532b6d67ab48cbbac854df5249d614",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 127.724402887559,
+        "Y": 509.001740971932
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Output",
+        "Id": "267ada2c713c4438af700dda261d1888",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1108.70049155541,
+        "Y": 348.970340264744
+      }
+    ],
+    "Annotations": [],
+    "X": -287.373709354957,
+    "Y": -231.941110472221,
+    "Zoom": 1.40972876398001
+  }
+}

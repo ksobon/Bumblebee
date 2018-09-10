@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{84619C49-CB1A-492A-9014-75DEBC9E2159}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>bumblebee.UI</RootNamespace>
+    <AssemblyName>bumblebee.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Analysis, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.DynamoCoreNodes.2.0.1.5055\lib\net45\Analysis.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreNodeModels, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.WpfUILibrary.2.0.1.5055\lib\net45\CoreNodeModels.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreNodeModelsWpf, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.WpfUILibrary.2.0.1.5055\lib\net45\CoreNodeModelsWpf.dll</HintPath>
+    </Reference>
+    <Reference Include="DesignScriptBuiltin, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DesignScriptBuiltin.dll</HintPath>
+    </Reference>
+    <Reference Include="DSCoreNodes, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.DynamoCoreNodes.2.0.1.5055\lib\net45\DSCoreNodes.dll</HintPath>
+    </Reference>
+    <Reference Include="DSIronPython, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DSIronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoApplications, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DynamoApplications.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoCore, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DynamoCore.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoCoreWpf, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.WpfUILibrary.2.0.1.5055\lib\net45\DynamoCoreWpf.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoInstallDetective, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DynamoInstallDetective.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoServices, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.DynamoServices.2.0.1.5055\lib\net45\DynamoServices.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoShapeManager, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DynamoShapeManager.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoUnits, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.0.1.5055\lib\net45\DynamoUnits.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoUtilities, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\DynamoUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="GeometryColor, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.DynamoCoreNodes.2.0.1.5055\lib\net45\GeometryColor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ProtoCore, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\ProtoCore.dll</HintPath>
+    </Reference>
+    <Reference Include="ProtoGeometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.ZeroTouchLibrary.2.0.1.5055\lib\net45\ProtoGeometry.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VMDataBridge, Version=2.0.1.5055, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamoVisualProgramming.Core.2.0.1.5055\lib\net45\VMDataBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dropdowns\ColorScaleCriteriaTypesUi.cs" />
+    <Compile Include="Dropdowns\CompoundLineTypesUi.cs" />
+    <Compile Include="Dropdowns\DirectionTypesUi.cs" />
+    <Compile Include="Dropdowns\HorizontalAlignTypesUi.cs" />
+    <Compile Include="Dropdowns\LabelPositionTypesUi.cs" />
+    <Compile Include="Dropdowns\LegendPositionTypesUi.cs" />
+    <Compile Include="Dropdowns\LineChartTypesUi.cs" />
+    <Compile Include="Dropdowns\LineTypesUi.cs" />
+    <Compile Include="Dropdowns\LineWeightTypesUi.cs" />
+    <Compile Include="Dropdowns\MarkerTypesUi.cs" />
+    <Compile Include="Dropdowns\OperatorTypesUi.cs" />
+    <Compile Include="Dropdowns\PatternTypesUi.cs" />
+    <Compile Include="Dropdowns\PieChartTypesUi.cs" />
+    <Compile Include="Dropdowns\VerticalAlignTypesUi.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bumblebee\bumblebee.csproj">
+      <Project>{24581d05-9543-43ae-b183-d66e65e34529}</Project>
+      <Name>bumblebee</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="bumblebeeUIImages.resx" />
+    <EmbeddedResource Include="PackageImages.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.ColorScaleCriteriaTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.ColorScaleCriteriaTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.CompoundLineTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.CompoundLineTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.DirectionTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.DirectionTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.HorizontalAlignTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.HorizontalAlignTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LabelPositionTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LabelPositionTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LegendPositionTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LegendPositionTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LineTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LineTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LineWeightTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LineWeightTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.MarkerTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.MarkerTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.OperatorTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.OperatorTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.PatternTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.PatternTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.VerticalAlignTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.VerticalAlignTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LineChartTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.LineChartTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.PieChartTypesUi.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bumblebee.UI.PieChartTypesUi.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0a4803d9-9966-419b-af79-9ad7563d5632.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0a4803d9-9966-419b-af79-9ad7563d5632.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0ab5ba27-e4b3-40da-8993-51f6559bf2f5.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0ab5ba27-e4b3-40da-8993-51f6559bf2f5.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0fa72262-6e6f-4aaf-bac2-c1a39c715aef.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0fa72262-6e6f-4aaf-bac2-c1a39c715aef.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1a475ce9-5817-448f-8712-7a5d8af338b1.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1a475ce9-5817-448f-8712-7a5d8af338b1.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1ed50c31-6d73-4abf-ad26-3a68831223c3.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1ed50c31-6d73-4abf-ad26-3a68831223c3.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6cf7f3b9-69ab-40da-b41c-62068370e1b8.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6cf7f3b9-69ab-40da-b41c-62068370e1b8.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6ff1db03-baaa-43cc-af6c-4da9f92d7280.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6ff1db03-baaa-43cc-af6c-4da9f92d7280.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\25fb7e98-dd92-4eae-b44d-91b4dbc1baa5.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\25fb7e98-dd92-4eae-b44d-91b4dbc1baa5.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\43ac48f5-8093-4c9b-94ac-19a233c0bc06.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\43ac48f5-8093-4c9b-94ac-19a233c0bc06.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\71cda78b-ebea-4608-a791-65119dc84b4c.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\71cda78b-ebea-4608-a791-65119dc84b4c.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\72e88648-ec17-4934-8376-d6c1f6183d67.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\72e88648-ec17-4934-8376-d6c1f6183d67.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\79bbba35-a980-44c4-a12e-8f8d1310aca4.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\79bbba35-a980-44c4-a12e-8f8d1310aca4.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\80d9b482-bc19-4b7b-81ea-1f41dd90a79f.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\80d9b482-bc19-4b7b-81ea-1f41dd90a79f.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\272cf006-9859-4e7e-850f-0dae48a8bbde.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\272cf006-9859-4e7e-850f-0dae48a8bbde.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\313e7d1a-3408-4b9f-9264-42b1bb1aaf5f.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\313e7d1a-3408-4b9f-9264-42b1bb1aaf5f.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5220ca12-2319-4a94-acca-b0945790e3dc.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5220ca12-2319-4a94-acca-b0945790e3dc.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5732b73f-72c2-4872-8e1a-e74b723547b1.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5732b73f-72c2-4872-8e1a-e74b723547b1.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14152ace-45b6-4531-8a58-0939fa4e2cab.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14152ace-45b6-4531-8a58-0939fa4e2cab.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\30811f26-aac6-44e3-b4a0-82838c770a09.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\30811f26-aac6-44e3-b4a0-82838c770a09.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\113644e4-4011-4aaa-a10e-a0919767a766.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\113644e4-4011-4aaa-a10e-a0919767a766.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\250384d4-98a8-4965-92bb-f74ab12f5aa4.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\250384d4-98a8-4965-92bb-f74ab12f5aa4.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\a186e8f0-0019-40e1-a042-6dd7d3b51bec.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\a186e8f0-0019-40e1-a042-6dd7d3b51bec.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\c152c82c-5cc0-4b2f-8f5b-ca010512a6fe.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\c152c82c-5cc0-4b2f-8f5b-ca010512a6fe.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ca163477-4ebe-4d92-84c6-7cdc209f9957.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ca163477-4ebe-4d92-84c6-7cdc209f9957.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cbcacb5b-1ebe-4913-bcef-fe243224d0d1.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cbcacb5b-1ebe-4913-bcef-fe243224d0d1.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cef61a69-968d-4487-a99f-b02ab62b2c03.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cef61a69-968d-4487-a99f-b02ab62b2c03.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\d600c221-9483-4209-b6d6-2703df9d3138.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\d600c221-9483-4209-b6d6-2703df9d3138.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dda25583-21b6-4243-8a54-dc32c7a43dcf.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dda25583-21b6-4243-8a54-dc32c7a43dcf.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ee2bfd6a-235b-4c14-a309-f5cb3e3e3227.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ee2bfd6a-235b-4c14-a309-f5cb3e3e3227.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\f93b7083-a1c3-4ecd-aa9b-556f7bedaeab.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\f93b7083-a1c3-4ecd-aa9b-556f7bedaeab.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\f7521b76-ce35-4601-9138-2666e11ff4a7.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\f7521b76-ce35-4601-9138-2666e11ff4a7.Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2e32bbb1-41b6-4b33-b00d-75314b3934ad.Large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2e32bbb1-41b6-4b33-b00d-75314b3934ad.Small.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="BeforeBuild">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)PackageImages.resx" OutputResources="$(ProjectDir)PackageImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)PackageImages.resources" OutputAssembly="$(OutDir)Package.customization.dll" />
+  </Target>
+  <Target Name="AfterBuild">
+    <!-- Get System.Drawing.dll -->
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <!-- Get assembly -->
+    <GetAssemblyIdentity AssemblyFiles="$(OutDir)$(TargetName).dll">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
+    </GetAssemblyIdentity>
+    <!-- Generate customization dll for UI nodes -->
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)bumblebeeUIImages.resx" OutputResources="$(ProjectDir)bumblebeeUIImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)bumblebeeUIImages.resources" OutputAssembly="$(OutDir)bumblebee.UI.customization.dll" Version="%(AssemblyInfo.Version)" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetPath)" "%25APPDATA%25\Dynamo\Dynamo Revit\2.0\packages\BumbleBee\bin"
+copy /Y "$(TargetDir)bumblebee.UI.customization.dll" "%25APPDATA%25\Dynamo\Dynamo Revit\2.0\packages\BumbleBee\bin"
+copy /Y "$(TargetDir)Package.customization.dll" "%25APPDATA%25\Dynamo\Dynamo Revit\2.0\packages\BumbleBee\bin"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

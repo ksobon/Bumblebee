@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bumblebee", "bumblebee\bumblebee.csproj", "{24581D05-9543-43AE-B183-D66E65E34529}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bumblebee.UI", "bumblebee.UI\bumblebee.UI.csproj", "{84619C49-CB1A-492A-9014-75DEBC9E2159}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{24581D05-9543-43AE-B183-D66E65E34529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24581D05-9543-43AE-B183-D66E65E34529}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24581D05-9543-43AE-B183-D66E65E34529}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24581D05-9543-43AE-B183-D66E65E34529}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84619C49-CB1A-492A-9014-75DEBC9E2159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84619C49-CB1A-492A-9014-75DEBC9E2159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84619C49-CB1A-492A-9014-75DEBC9E2159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84619C49-CB1A-492A-9014-75DEBC9E2159}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B89B26D6-1DDE-4CB2-A217-0C9011DE5C16}
+	EndGlobalSection
+EndGlobal

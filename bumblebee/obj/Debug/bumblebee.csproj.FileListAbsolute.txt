@@ -1,0 +1,8 @@
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\bin\Debug\bumblebee.dll
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\bin\Debug\bumblebee.pdb
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\bin\Debug\DynamoServices.dll
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\obj\Debug\bumblebee.csproj.CoreCompileInputs.cache
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\obj\Debug\bumblebee.csproj.CopyComplete
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\obj\Debug\bumblebee.dll
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\obj\Debug\bumblebee.pdb
+C:\Users\konrad.sobon\source\repos\bumblebee\bumblebee\obj\Debug\bumblebee.csprojAssemblyReference.cache
